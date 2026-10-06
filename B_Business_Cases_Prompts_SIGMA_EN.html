@@ -1,0 +1,890 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cases and prompts · Business · Copilot Chat · SIGMA</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --hueso:#F7F3EA; --papel:#FFFDF8; --tinta:#1C1B18; --gris:#6E6960;
+ --naranja:#C9581F; --naranja-cl:#E8A57F; --verde:#22422F; --linea:#DED6C4;
+ --caja:#22211D; --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+ --sans:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+ --mono:"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:112px}
+body{background:var(--hueso);color:var(--tinta);font-family:var(--sans);
+ font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.serif{font-family:var(--serif)}
+
+/* ---------- cabecera ---------- */
+header.hero{padding:56px 0 40px;border-bottom:1px solid var(--linea)}
+.container{max-width:920px;margin:0 auto;padding:0 24px}
+.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+ color:var(--naranja);font-weight:700;margin-bottom:18px}
+h1{font-family:var(--serif);font-size:clamp(34px,6vw,58px);line-height:1.04;
+ font-weight:400;letter-spacing:-.01em}
+h1 .k{font-style:italic;color:var(--naranja)}
+.hero .rule{width:72px;height:3px;background:var(--naranja);margin:26px 0 22px}
+.hero .lead{font-family:var(--serif);font-size:19px;line-height:1.5;max-width:640px;color:#33312C}
+.facts{display:flex;flex-wrap:wrap;gap:32px;margin-top:30px;padding-top:20px;
+ border-top:1px solid var(--linea);font-size:12px;color:var(--gris)}
+.facts b{display:block;color:var(--tinta);font-size:15px;font-weight:600;margin-top:2px}
+
+/* ---------- barra pegajosa ---------- */
+.bar{position:sticky;top:0;z-index:50;background:rgba(247,243,234,.94);
+ backdrop-filter:blur(10px);border-bottom:1px solid var(--linea)}
+.bar-in{max-width:920px;margin:0 auto;padding:11px 24px;display:flex;
+ align-items:center;gap:12px;flex-wrap:wrap}
+.chips{display:flex;gap:5px;flex-wrap:wrap;flex:1;min-width:220px}
+.chip{font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:5px 9px;
+ border:1px solid var(--linea);border-radius:6px;background:var(--papel);
+ color:var(--gris);text-decoration:none;transition:.14s;white-space:nowrap}
+.chip:hover{border-color:var(--naranja);color:var(--naranja)}
+.chip.on{background:var(--verde);border-color:var(--verde);color:#F3EFE4}
+#q{font-family:var(--sans);font-size:13px;padding:7px 11px;border:1px solid var(--linea);
+ border-radius:6px;background:var(--papel);color:var(--tinta);width:190px}
+#q:focus{outline:none;border-color:var(--naranja)}
+.count{font-size:11.5px;color:var(--gris);white-space:nowrap}
+
+/* ---------- intro ---------- */
+.howto{padding:34px 0;border-bottom:1px solid var(--linea)}
+.howto h2{font-family:var(--serif);font-size:24px;font-weight:400;margin-bottom:14px}
+.howto p{max-width:700px;margin-bottom:11px;color:#3A3833}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:20px}
+.stepcard{background:var(--papel);border:1px solid var(--linea);border-radius:9px;padding:15px 17px}
+.stepcard .n{font-family:var(--serif);font-size:26px;color:var(--naranja);line-height:1}
+.stepcard b{display:block;margin:6px 0 4px;font-size:14.5px}
+.stepcard span{font-size:13.5px;color:var(--gris);line-height:1.5}
+.warn{margin-top:20px;background:var(--papel);border:1px solid var(--linea);
+ border-left:4px solid var(--naranja);border-radius:0 8px 8px 0;padding:14px 18px;font-size:14.5px}
+.warn b{display:block;margin-bottom:4px}
+
+/* ---------- casos ---------- */
+.case{padding:44px 0;border-bottom:1px solid var(--linea)}
+.case.hide{display:none}
+.code{font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+ color:var(--naranja);font-weight:700;margin-bottom:7px}
+.case h2{font-family:var(--serif);font-size:clamp(26px,4vw,36px);font-weight:400;
+ line-height:1.12;margin-bottom:16px}
+.stripe{display:flex;flex-wrap:wrap;gap:26px;padding:12px 0;margin-bottom:22px;
+ border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);
+ font-size:11.5px;color:var(--gris)}
+.stripe b{display:block;color:var(--tinta);font-size:14px;font-weight:600;margin-top:2px}
+h3.sub{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);
+ font-weight:700;margin:26px 0 9px}
+.case p{margin-bottom:10px;max-width:740px}
+.case ul{margin:0 0 10px 20px}
+.case li{margin-bottom:5px;max-width:720px}
+
+/* ---------- prompt ---------- */
+.step{margin:0 0 22px}
+.step-h{display:flex;align-items:baseline;gap:12px;margin-bottom:9px}
+.step-n{font-family:var(--serif);font-size:24px;color:var(--naranja);line-height:1;min-width:22px}
+.step-t{font-weight:700;font-size:16.5px}
+.pbox{position:relative;background:var(--caja);border-radius:10px;padding:20px 22px 20px}
+.pbox pre{font-family:var(--mono);font-size:13.2px;line-height:1.62;color:#E9E2D3;
+ white-space:pre-wrap;word-wrap:break-word;margin:0}
+.plabel{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--naranja-cl);
+ font-weight:700;margin-bottom:11px;display:block}
+.copy{position:absolute;top:13px;right:13px;font-family:var(--sans);font-size:11.5px;
+ font-weight:700;letter-spacing:.03em;padding:6px 12px;border-radius:6px;cursor:pointer;
+ background:#3A3831;color:#E9E2D3;border:1px solid #4C4941;transition:.14s}
+.copy:hover{background:var(--naranja);border-color:var(--naranja);color:#fff}
+.copy.ok{background:#3E6B4C;border-color:#3E6B4C;color:#fff}
+.why{font-size:14px;color:#4A463F;margin:11px 0 0 34px;max-width:700px}
+.why b{color:var(--tinta)}
+.chk{font-size:14px;margin:9px 0 0 34px;max-width:700px;background:#EFE9DA;
+ border-left:3px solid var(--naranja);padding:10px 14px;border-radius:0 6px 6px 0}
+.chk b{display:block;font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--naranja);margin-bottom:3px}
+.copyall{font-family:var(--sans);font-size:12.5px;font-weight:700;padding:8px 15px;
+ border:1px solid var(--linea);border-radius:7px;background:var(--papel);color:var(--gris);
+ cursor:pointer;transition:.14s}
+.copyall:hover{border-color:var(--naranja);color:var(--naranja)}
+.copyall.ok{background:var(--verde);border-color:var(--verde);color:#F3EFE4}
+
+.callout{background:var(--papel);border:1px solid var(--linea);border-left:4px solid var(--naranja);
+ border-radius:0 8px 8px 0;padding:16px 20px;margin:22px 0;max-width:760px}
+.callout .t{font-weight:700;font-size:14.5px;margin-bottom:5px}
+.callout p{margin:0;font-size:14.5px}
+.learn{font-size:14.5px;color:var(--gris);border-top:1px solid var(--linea);padding-top:14px;max-width:760px}
+.learn b{color:var(--tinta)}
+details{background:var(--papel);border:1px solid var(--linea);border-radius:8px;
+ padding:13px 18px;margin:20px 0;max-width:760px}
+details summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--naranja);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";}
+details[open] summary::before{content:"▾ ";}
+details p{margin:10px 0 0;font-size:14.5px}
+.files{font-size:14.5px;color:var(--gris)}
+.files code{font-family:var(--mono);font-size:13px;background:#EFE9DA;padding:2px 6px;border-radius:4px;color:var(--tinta)}
+
+footer{padding:40px 0 60px;font-size:13px;color:var(--gris)}
+footer b{color:var(--tinta)}
+.top{position:fixed;right:20px;bottom:20px;width:42px;height:42px;border-radius:50%;
+ background:var(--verde);color:#F3EFE4;border:none;cursor:pointer;font-size:17px;
+ display:none;z-index:60;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.top.show{display:block}
+@media print{
+ .bar,.top,.copy,.copyall{display:none!important}
+ body{font-size:11pt;background:#fff}
+ .case{page-break-inside:avoid;break-inside:avoid}
+ .pbox{background:#F0ECE1;border:1px solid #CCC}
+ .pbox pre{color:#1C1B18}
+ .plabel{color:#C9581F}
+ details{border:1px solid #ccc} details[open] summary::before{content:""}
+}
+@media (max-width:640px){
+ .stripe{gap:16px} .why,.chk{margin-left:0}
+ #q{width:100%}
+}
+</style></head><body>
+<header class="hero"><div class="container">
+<div class="kicker">Kemp · SIGMA · Block B</div>
+<h1>Business <span class="k">cases</span></h1><div class="rule"></div>
+<p class="lead">Sixteen situations with deliberate gaps, sources that contradict each other and decisions that do not belong to whoever prepares the material.</p>
+<div class="facts"><div>Cases<b>C01 – C16</b></div><div>Format<b>8 + 12 + 7 minutes</b></div><div>Prompts<b>64, ready to copy</b></div><div>Rubric<b>12 points · pass at 9</b></div></div>
+</div></header>
+<div class="bar"><div class="bar-in">
+<div class="chips"><a class="chip" href="#C01">C01</a><a class="chip" href="#C02">C02</a><a class="chip" href="#C03">C03</a><a class="chip" href="#C04">C04</a><a class="chip" href="#C05">C05</a><a class="chip" href="#C06">C06</a><a class="chip" href="#C07">C07</a><a class="chip" href="#C08">C08</a><a class="chip" href="#C09">C09</a><a class="chip" href="#C10">C10</a><a class="chip" href="#C11">C11</a><a class="chip" href="#C12">C12</a><a class="chip" href="#C13">C13</a><a class="chip" href="#C14">C14</a><a class="chip" href="#C15">C15</a><a class="chip" href="#C16">C16</a></div>
+<input id="q" type="search" placeholder="Search case, tool, keyword…" autocomplete="off">
+<span class="count" id="cnt"></span>
+</div></div>
+<section class="howto"><div class="container">
+<h2 class="serif">How a case works</h2>
+<p>The offline round is not a warm-up. It is what produces the judgement you will then use to
+weigh the tool's answer. Skip it and you will accept whatever comes out first.</p>
+<div class="steps">
+<div class="stepcard"><div class="n">8'</div><b>Offline round</b><span>No computer. Read the
+sources, state the decision, work out one reference figure by hand and note the gaps.</span></div>
+<div class="stepcard"><div class="n">12'</div><b>Copilot round</b><span>Attach only the files for
+this case, paste the base request and send the prompts in order.</span></div>
+<div class="stepcard"><div class="n">7'</div><b>Audit</b><span>Look for unsupported claims,
+calculations you cannot reproduce, hidden assumptions and decisions that need a human.</span></div>
+</div>
+<h3 class="sub" style="margin-top:30px">The base request · paste it at the start of every case</h3>
+<p>After attaching the files and before the first case-specific prompt. It is the same for all
+sixteen cases.</p>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Use only the attached files. First state what you can and cannot assert. Then answer the objective of the case, pointing for each conclusion to the source and the data that support it. Separate facts, calculations, inferences and assumptions. If data is missing, do not invent it: formulate the question that would unblock the decision. Finish with a check that another person can reproduce.</pre></div>
+<h3 class="sub" style="margin-top:26px">The audit counter-prompt · for the last seven minutes</h3>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Act as a sceptical reviewer. Examine your previous answer using only the attached files. Build a table with: claim, type —fact, calculation, inference or assumption—, exact source, confidence level and pending check. Flag any calculation that cannot be reproduced, any unit that is not comparable, any possible double counting and any causal relationship that has not been demonstrated. Rewrite the recommendation if the evidence does not support it.</pre></div>
+<div class="warn"><b>The golden rule</b>
+The case data is synthetic and deliberately incomplete. Do not fill the gaps with real information
+about the company, customers, plants, suppliers or employees. The gaps are part of the exercise.
+No Copilot output is a decision: it is a draft until a person has checked sources, calculations and
+authority.</div>
+</div></section>
+<main><section class="case" id="C01"><div class="container">
+<div class="code">Case C01 · Integrated Operations · Supply Chain · S&amp;OP</div>
+<h2>The exception in S&amp;OP</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C01_SOP</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>The executive meeting starts in twenty-seven minutes. There are signals on demand, inventory, capacity and service, and not one shared decision. A promotion already announced that may not be in the forecast, a pulled-forward order logged as requested, a maintenance shutdown nobody has quantified, and a cost of capital with no threshold.</p>
+<p class="files"><b>Deliverable.</b> Exception radar and decision sheet<br><b>Files.</b> <code>sop_plan.csv</code> · <code>commercial_signals.md</code> · <code>service_rules.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Pick three decisions the committee actually can make today. Write down two missing data points and one concrete tension between service and cost. Eight minutes, no computer.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Read the plan without interpreting it</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching four files from a fictional S&amp;OP planning case. We will be working with October, November and December 2026.
+
+Before you calculate anything, tell me what each file contains, what each CSV column means, and which rules in the case limit what we can conclude.
+
+Don't propose any production recommendation yet.</pre></div>
+<div class="chk"><b>What to check</b>It has to pick up that capacity is per SKU and per month and does not carry over, and that the forecast is a signal, not an order.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The exception radar</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now build an exception radar by SKU and month with these columns: month, SKU, opening inventory, confirmed orders, safety stock, planned capacity, and a headroom column you calculate, explaining the formula you use.
+
+Flag the combinations that need attention and explain why in one line. For every figure, cite the column it came from. Don't use the forecast as if it were committed demand.</pre></div>
+<div class="chk"><b>What to check</b>NORTE-500 in October has 8,450 boxes confirmed against 900 of inventory and 7,600 of capacity. It has to come out flagged.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The scenarios, not the answer</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>The November promotion on NORTE-250 may or may not be included in forecast v3, and the pulled-forward order of 1,100 boxes is logged as requested, not confirmed.
+
+Show me the effect of those two uncertainties as four scenarios, not as a single assumption. In each scenario, say what changes and which decision would be different.
+
+Don't pick a scenario for me.</pre></div>
+<div class="chk"><b>What to check</b>If Copilot picks one scenario or averages the four, it has skipped rule 5 in the rules file.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The decision sheet</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write a one-page decision sheet for the committee, with this structure: proposed action, the evidence behind it with its file and column, the risk if it goes ahead, the condition that would change it, and the proposed functional owner.
+
+Don't invent lead times, minimum batch sizes or extraordinary capacity: the case doesn't authorize them. Close with the two questions the committee has to answer today.</pre></div>
+<div class="chk"><b>What to check</b>No action may imply extraordinary production or moving capacity between SKUs.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Is the announced promotion already in the forecast?</li>
+<li>Has monthly capacity been treated as interchangeable between SKUs?</li>
+<li>Do coverage and service level mean the same thing in the answer?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>The November promotion may not be included. The pulled-forward order is not confirmed. Capacity does not move between SKUs by default. The correct output uses scenarios.</p></details>
+</div></section>
+<section class="case" id="C02"><div class="container">
+<div class="code">Case C02 · IT · Infrastructure Services</div>
+<h2>Verifiable postmortem</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C02_IT_INCIDENTS</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Management says version 4.7.0 caused the access failures. Operations wants it rolled back immediately. There are twelve incidents, five recent changes across four different components, and no history before 24 August.</p>
+<p class="files"><b>Deliverable.</b> Postmortem and prevention plan<br><b>Files.</b> <code>it_tickets.csv</code> · <code>recent_changes.md</code> · <code>runbook.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Group the tickets by pattern, draw the timeline on paper, and come up with two explanations other than «4.7.0 is to blame». Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Frequency, severity, pattern</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the incident log, the change log and the runbook from a fictional case.
+
+Before you look for causes, give me: number of incidents by service, by version and by symptom; distribution by hour of the day; and average and total duration by severity.
+
+Before you count, check for duplicate tickets and handle them the way the runbook says. Tell me how many you excluded and which ones.</pre></div>
+<div class="chk"><b>What to check</b>INC-103 is a duplicate of INC-102. If the count comes out at 12 instead of 11, the runbook wasn't applied.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The crossed timeline</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now cross the incidents with the change log on a single timeline.
+
+For each change, say which incidents happen after it, in which component, and how far apart. Flag explicitly the changes that coincide in time but affect a component other than the one failing.
+
+Don't attribute cause to any of them yet.</pre></div>
+<div class="chk"><b>What to check</b>The backup window adjustment ends at 08:10 and the 502 errors cluster between 08:05 and 08:20. The 4.7.0 deployment belongs to the portal.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Hypotheses with evidence for and against</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Put forward three alternative causal hypotheses. For each one: the statement, the evidence in favor citing the specific ticket or change, the evidence against, and which data point would confirm or rule it out.
+
+Rank them by plausibility and say explicitly that none of them is proven with this data. Remember there is no history before 24 August.</pre></div>
+<div class="chk"><b>What to check</b>At least one hypothesis has to be something other than version 4.7.0.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Roll back or hold</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the postmortem with: chronology, prioritized hypotheses, evidence, and a decision rule on rolling back version 4.7.0.
+
+The rule has to state which metrics must be captured beforehand according to the runbook, what threshold would trigger the rollback and who approves it. Add a prevention plan with three measurable actions, each with its before and after metric.
+
+Don't conclude a definitive cause.</pre></div>
+<div class="chk"><b>What to check</b>A rollback needs the service owner's approval and prior capture of error rate, cache usage, latency and traces.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Are there duplicate tickets, and were they excluded from the count?</li>
+<li>Was it all calculated in a consistent local time?</li>
+<li>Which change coincides in time but affects a different component?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>INC-103 duplicates INC-102. The errors cluster in the morning, close to the end of the database backup, but the history proves no cause. Rolling back 4.7.0 demands metrics first.</p></details>
+</div></section>
+<section class="case" id="C03"><div class="container">
+<div class="code">Case C03 · IT · Application Services</div>
+<h2>Requirements you can test</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C03_REQUIREMENTS</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>The business wants «un panel con IA que avise de todo». The sponsor defines success as «que nadie se entere tarde». There are five interviews with incompatible expectations, three data sources with different refresh rates, and a pilot date already locked.</p>
+<p class="files"><b>Deliverable.</b> Brief, initial backlog and UAT plan<br><b>Files.</b> <code>business_request.md</code> · <code>interviews.md</code> · <code>constraints.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Underline the verbs, the users, the decisions and the ambiguous terms in the request. Write five discovery questions. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Hunting the ambiguity</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a business request, interview extracts and the confirmed constraints from a fictional case.
+
+Give me a table with every ambiguous or unmeasurable term that appears —«todo», «antes», «tiempo real», «muy sencillo», «importante»—, where each one appears, and what would have to be pinned down to turn it into a requirement.
+
+Don't propose requirements or technology yet.</pre></div>
+<div class="chk"><b>What to check</b>«Que nadie se entere tarde» has to be in the table: it is not a measurable success criterion.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Actors, decisions and conflicts</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now map the actors from the interviews: who they are, what decision they make, what information they need to make it, and how often.
+
+Then list the conflicts between what different people ask for, and between what they ask for and what the constraints allow. Each conflict with both positions and who would have to settle it.</pre></div>
+<div class="chk"><b>What to check</b>«Tiempo real», as the commercial director uses it, collides with the weekly refresh of returns. The automatic action the business asks for is not authorized by operations.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Stories with observable criteria</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Turn the needs into user stories with observable acceptance criteria.
+
+Each criterion has to be checkable by looking at the screen or the data, with no interpretation. Distinguish three levels explicitly: show information, recommend an action, and execute an action automatically. Mark with [NOT CONFIRMED] every story that depends on something nobody has validated.
+
+Don't pick technology or architecture.</pre></div>
+<div class="chk"><b>What to check</b>No story may include automatic order execution: it is not authorized.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The pilot that fits</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>With the pilot date of 15 November and the declared pilot users, propose a minimum scope that can actually be built, plus a UAT plan.
+
+The UAT plan has to say: what gets tested, who tests it, with what sample data, and what the acceptance criterion is. Add the list of open questions that have to be closed before building starts.</pre></div>
+<div class="chk"><b>What to check</b>The scope has to respect permissions by zone: there is no approved cross-zone access.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has it turned wishes into requirements without validation?</li>
+<li>Does it distinguish alert, recommendation and automatic action?</li>
+<li>Does it respect the refresh rates actually available?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>«Todo», «antes» and «tiempo real» are not requirements. Automatic actions are not authorized. Acceptance criteria have to be observable.</p></details>
+</div></section>
+<section class="case" id="C04"><div class="container">
+<div class="code">Case C04 · Integrated Operations · Sourcing · Ingredients &amp; Packaging</div>
+<h2>Suppliers, no fictional winner</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C04_SUPPLIERS</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Four packaging quotes for a six-month trial. Three different incoterms, one freight figure not supplied, one missing yield loss, one certificate claimed without evidence, and a price revision tied to a monthly index. The lowest price does not include the same things as the others.</p>
+<p class="files"><b>Deliverable.</b> Weighted comparison and negotiation script<br><b>Files.</b> <code>supplier_offers.csv</code> · <code>due_diligence.md</code> · <code>purchasing_policy.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Normalize on paper what each price covers. List the conditions that make a direct comparison impossible. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">What each price covers</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching four fictional packaging quotes, some diligence notes and the purchasing policy for the case.
+
+Before comparing, explain what each quote's price does and does not include given its incoterm, and which items would be needed to compare them on the same basis.
+
+An empty cell means the figure was not supplied: don't turn it into a zero.</pre></div>
+<div class="chk"><b>What to check</b>DDP, EXW and FCA don't cover the same things. VantaBox supplied neither freight nor yield loss.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The comparable cost, with its range</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Calculate the comparable cost per 1,000 units for the quotes that allow it, including freight and the effect of yield loss on the forecast consumption of 540,000 units over six months.
+
+Show the formula. For the quotes with missing data, don't produce a single value: give a reasoned range, saying which assumption generates it, or say it cannot be calculated.
+
+Add the effect of the ±15 % swing in consumption.</pre></div>
+<div class="chk"><b>What to check</b>VantaBox's cost cannot be calculated without freight and yield loss. Quoting «174 €» as if it were comparable is the trap in this case.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Risk, not just price</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build a risk matrix with the five dimensions in the policy: quality evidence, continuity, comparable cost, lead time and price-revision risk.
+
+Score each supplier and spell out the scoring criterion. A certificate claimed without evidence does not score the same as one with evidence attached. Point out which supplier concentrates the most risk even if its price looks attractive.</pre></div>
+<div class="chk"><b>What to check</b>NexoFibra has the low price, a certificate without evidence, EXW and a monthly index: the risk piles up there.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">A conditional recommendation</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write a conditional recommendation: which supplier you would propose, under what conditions and within what cost range.
+
+Add a negotiation script with the three checks that have to be passed before any award, and the outstanding due diligence questions per supplier.
+
+The policy does not allow a final award without validating quality and capacity: reflect that.</pre></div>
+<div class="chk"><b>What to check</b>Any closed, unconditional recommendation breaks the policy in this case.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Have EXW and DDP been compared directly?</li>
+<li>Does a claimed certificate count as evidence received?</li>
+<li>Is yield loss included in the unit cost?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>DDP, EXW and FCA are not comparable without freight. The apparent lowest price concentrates the risk. Missing data is not worth zero.</p></details>
+</div></section>
+<section class="case" id="C05"><div class="container">
+<div class="code">Case C05 · Commercial Excellence · Revenue Management</div>
+<h2>Promotion and margin leak</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C05_REVENUE</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Volume grew in week 4 and the team is celebrating. There was a promotion with extra display space, a competitor with a partial stockout of unknown duration, two hot days in week 2, and two SKUs that share a consumption occasion. There is no control group.</p>
+<p class="files"><b>Deliverable.</b> Promotion table and margin bridge<br><b>Files.</b> <code>weekly_performance.csv</code> · <code>commercial_calendar.md</code> · <code>definitions.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Work out net revenue and approximate contribution margin by week by hand. Explain what you cannot attribute to the promotion. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Definitions first</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the weekly performance file, the commercial calendar and the definitions from a fictional revenue management case.
+
+Apply the definitions in the file exactly as written and calculate, by week and SKU: net units, approximate net revenue and approximate contribution margin.
+
+Show the formula used for each metric before the table. Don't use definitions of your own.</pre></div>
+<div class="chk"><b>What to check</b>Promotional spend is deducted in the margin. In W4, CLARO-1 carries 9,100 € of promotional spend against 1,750 € in W3.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Price, volume and mix</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build a price-volume-mix analysis comparing week 4 against the average of weeks 1 to 3.
+
+Break the margin variance into the price effect, the volume effect, the mix effect and the promotional spend effect. Show the calculation for each component and check that the components add up to the total variance.</pre></div>
+<div class="chk"><b>What to check</b>If the components don't add up to the total variance, the bridge is built wrong. Check it.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">What else could have happened</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>List every alternative explanation for the week 4 volume increase that follows from the commercial calendar, and what data would be needed to rule each one out.
+
+Include explicitly the possible cannibalization between CLARO-1 and CLARO-2, and the competitor's stockout. Say what the design would have had to include for causality to be attributable at all.</pre></div>
+<div class="chk"><b>What to check</b>CLARO-2 drops from 8,500 to 6,900 units in W4. That drop is the cannibalization signal.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The next test</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the margin bridge as a table, plus a recommendation that is not a causal conclusion but the design of the next test.
+
+State: what would be tested, against what control group, for how long, which metric would decide, and what result would kill the idea. One page maximum.</pre></div>
+<div class="chk"><b>What to check</b>Any sentence along the lines of «the promotion worked» or «the promotion destroyed margin» without a control is a conclusion that won't hold.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has promotional spend been deducted?</li>
+<li>Do the weeks share the same mix?</li>
+<li>Could the extra sales have shifted over from another SKU?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>A promotion can lift volume and cut margin. Promotional spend, returns and possible cannibalization change the reading. There is no clean causality without a control.</p></details>
+</div></section>
+<section class="case" id="C06"><div class="container">
+<div class="code">Case C06 · Integrated Operations · Sourcing · CAPEX &amp; GENEX</div>
+<h2>Investment gate</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C06_CAPEX</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Four options, a budget of 330,000 € and room for one initiative this quarter. The figures look comparable and are not: one includes micro-stoppages, another models 2025 prices, another declares gross savings, and another counts as savings a headcount reallocation nobody has agreed to treat that way.</p>
+<p class="files"><b>Deliverable.</b> Business case and gate review<br><b>Files.</b> <code>capex_options.csv</code> · <code>assumptions.md</code> · <code>gate_criteria.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Build a value-risk matrix on paper and mark which assumption would change the ranking. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Normalize the savings</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching four fictional investment options, their assumptions and the gate criteria.
+
+Before calculating, classify each option's declared annual saving as gross, net or unconfirmed, according to what the assumptions say. In each case, explain what would have to be deducted or validated to reach a comparable net saving.
+
+Point out which cost none of the four includes.</pre></div>
+<div class="chk"><b>What to check</b>Option C declares a gross saving. None of them includes the opportunity cost of the installation shutdown.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Payback and sensitivity</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Calculate the simple payback for each option using recurring net savings —declared saving minus annual recurring cost—, showing the formula.
+
+Add a ±20 % sensitivity on the net saving, as the gate requires, and tell me in which options the ranking changes inside that range.
+
+Also say which options fall outside the budget.</pre></div>
+<div class="chk"><b>What to check</b>Option D costs 420,000 € and the budget is 330,000 €: it drops out as an immediate recommendation.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The criteria that eliminate</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now apply the gate criteria in order: budget, target payback, operational risk and safety.
+
+Tell me which options are knocked out by each criterion and which are still alive. Don't convert the confidence of the estimate —high, medium, low— into a numerical probability: use it as a qualifier, not as a factor in the arithmetic.
+
+Say whether a safety criterion knocks out a profitable option.</pre></div>
+<div class="chk"><b>What to check</b>Operational risk 4 or 5 requires a pilot first. Option D's safety improvement is low.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The gate review</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the business case and the gate review action log: recommended priority, conditions that must be met for approval, data to validate before the next gate, and which options stay in the future portfolio.
+
+Don't propose direct approval of any option with high operational risk. Close with the question Finance has to answer on how the headcount reallocation is treated.</pre></div>
+<div class="chk"><b>What to check</b>Treating the headcount reallocation as a financial saving is an open decision, not a data point.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Was the recurring cost deducted?</li>
+<li>Has confidence been treated as an exact probability?</li>
+<li>Can a safety requirement knock out a profitable option?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>Simple payback is no substitute for NPV. The opportunity cost during the shutdown is not quantified and the pilot evidence differs. The correct output proposes gates, not automatic approval.</p></details>
+</div></section>
+<section class="case" id="C07"><div class="container">
+<div class="code">Case C07 · Integrated Operations · Quality &amp; Food Safety</div>
+<h2>Deviation and CAPA</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C07_QUALITY</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Three incomplete seals in a sample of eighty units from batch L-240. A reel change twenty-two minutes earlier. An operator comment stating that «la bobina venía mal». Temperature within the declared range, except the threshold is nowhere in the pack. No record of product release.</p>
+<p class="files"><b>Deliverable.</b> Deviation, investigation and provisional CAPA<br><b>Files.</b> <code>audit_findings.csv</code> · <code>quality_procedure.md</code> · <code>fictitious_bulletin.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Separate containment, investigation, cause, correction and CAPA on paper. Define what evidence is missing at each link. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The chronology, with its certainty</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the findings, the deviation management procedure and the context note from a fictional quality case.
+
+Build the chronology of events with four columns: time, event, source and degree of certainty exactly as the file states it.
+
+Don't interpret any causal relationship yet. Follow the certainty column literally.</pre></div>
+<div class="chk"><b>What to check</b>«La bobina venía mal» is logged as an unverified opinion. If it shows up as a fact, the case is lost at step one.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Containment before cause</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>According to the attached procedure, tell me which containment actions apply right now, before the cause is known.
+
+Include: the scope of potentially affected product that can be determined with the available data, what cannot be determined, and what status the product has according to the file.
+
+Don't propose a cause or a CAPA yet.</pre></div>
+<div class="chk"><b>What to check</b>There is no record of product release. The scope cannot be closed: there is no confirmatory inspection of the reel.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Hypothesis tree</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build an investigation tree with at least four different causal hypotheses —not just the reel—.
+
+For each one: the statement, the available evidence in favor, the evidence against, and which specific test would confirm or rule it out, naming who would run it.
+
+Remember that closeness in time does not prove cause and that the temperature threshold is not in the pack.</pre></div>
+<div class="chk"><b>What to check</b>If every hypothesis is about the reel, the investigation is biased by the operator's comment.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The deviation sheet</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the deviation sheet as the procedure requires: batch, sample and time identification; observed facts kept separate from hypotheses; containment applied; investigation under way; and a CAPA explicitly marked as provisional.
+
+State which function has to approve the CAPA and when, and what evidence is missing before it can be closed. Don't treat the product as released and don't propose a final CAPA.</pre></div>
+<div class="chk"><b>What to check</b>An immediate fix is not a CAPA. The CAPA is approved after the investigation and review by the authorized function.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has cause been attributed to the reel?</li>
+<li>Has the product been treated as released?</li>
+<li>Does containment come before cause?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>The reel change precedes the finding, but it does not prove cause. Containment and investigation come first; there is no record of release. The CAPA stays provisional.</p></details>
+</div></section>
+<section class="case" id="C08"><div class="container">
+<div class="code">Case C08 · IT · Commercial, Supply Chain · Digital Platforms</div>
+<h2>Integration patterns and ATP</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C08_BUSINESS_IT</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Sales sees stock; Supply Chain considers it committed. An order for 420 units against 1,240 on hand, 900 reserved and 180 in quality hold. A production run of 600 with no confirmed date. A portal promising real time on top of three sources that refresh every 5 minutes, every hour, and overnight.</p>
+<p class="files"><b>Deliverable.</b> ATP rules, preliminary ADR and PoC plan<br><b>Files.</b> <code>business_problem.md</code> · <code>systems_map.csv</code> · <code>stakeholder_voices.md</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Define available-to-promise in one sentence, map data to system, and separate business requirement, source constraint and architecture decision. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Calculating ATP</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the business problem, the systems map and the stakeholder voices from a fictional case.
+
+Calculate the current available-to-promise showing the full arithmetic, and state which part of the 420-unit order can be promised and which cannot.
+
+Say explicitly whether the upcoming production of 600 units goes into the calculation or not, and why.</pre></div>
+<div class="chk"><b>What to check</b>1,240 − 900 − 180 = 160 units. The 420-unit order cannot be promised in full and unconfirmed production stays out.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Rules and test cases</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the ATP rules in business language, not system language: what is always deducted, what is deducted conditionally, what is never committed, and what happens when the order exceeds what is available.
+
+For each rule, write two test cases with concrete data and the expected result, including one edge case.</pre></div>
+<div class="chk"><b>What to check</b>There has to be an explicit rule on quality hold and another on production with no confirmed date.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Freshness, accuracy and traceability</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Analyze the portal's three order-status sources and tell me what freshness can honestly be promised to the end user.
+
+Separate the three things the stakeholders are mixing up: freshness, accuracy and traceability. Propose how to show the user how old a data point is, without promising real time where there isn't any.</pre></div>
+<div class="chk"><b>What to check</b>An overnight source makes universal real time impossible to promise. Refresh rate is not accuracy.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Preliminary ADR and PoC</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Compare three conceptual integration patterns —no brand or product names— for this problem, with their advantages, drawbacks and which requirement each one covers.
+
+Write a preliminary ADR with the proposed decision, the alternatives considered, the consequences and what is still open. Add a PoC plan with scope, duration, success metric and the points Security has to review.
+
+Don't pick a specific technology: the requirements aren't closed.</pre></div>
+<div class="chk"><b>What to check</b>If the name of a commercial product shows up, technology has been chosen before the requirements were closed.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has quality hold or unconfirmed production been counted in?</li>
+<li>Is refresh rate being treated as accuracy?</li>
+<li>Has technology been chosen before the requirements were closed?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>Current ATP: 1,240 − 900 − 180 = 160 units. The 420-unit order cannot be promised in full and unconfirmed production stays out. An overnight source makes universal real time impossible to promise.</p></details>
+</div></section>
+<section class="case" id="C09"><div class="container">
+<div class="code">Case C09 · Integrated Operations · Industrial Excellence</div>
+<h2>OEE with no favorite culprit</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C09_OEE</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>A line is losing performance and the explanation «falta de formación» has shown up far too early. Availability 91 %, performance 82 %, quality 98 %. The theoretical speed that holds up the performance figure hasn't been reviewed in eighteen months. Micro-stoppages are not broken down by mechanism.</p>
+<p class="files"><b>Deliverable.</b> Improvement A3 and experiment plan<br><b>Files.</b> <code>line_stoppages.csv</code> · <code>shift_notes.md</code> · <code>process_flow.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Calculate the OEE by hand, rank the losses, and tell data, hypothesis and countermeasure apart. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The calculation, and what it rests on</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the line indicators, the shift notes and the exercise rules from a fictional case.
+
+Calculate the OEE applying the formula in the rules file and show the arithmetic with decimals. Then point out which component of the calculation rests on a basis the file itself questions, and what reviewing it would do to the result.</pre></div>
+<div class="chk"><b>What to check</b>OEE = 0.91 × 0.82 × 0.98 ≈ 73.1 %. If percentages get added up, it's wrong.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Loss tree</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build a loss tree from the available data: which loss is quantified, which is bundled with no breakdown, and which is not measured at all.
+
+Rank the quantified ones by size. For the bundled ones, say what would have to be measured to break them down, and how.</pre></div>
+<div class="chk"><b>What to check</b>Micro-stoppages add up to 47 minutes and are not broken down by mechanism: nothing inside them can be prioritized.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Separate observation, hypothesis and countermeasure</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Give me a three-column table: observation —what the files actually state—, hypothesis —what somebody assumes— and proposed countermeasure.
+
+Put «falta de formación» in the column the files put it in, and explain what evidence it would take to move it across. Add at least two alternative hypotheses the data does not rule out.</pre></div>
+<div class="chk"><b>What to check</b>«Todo es por falta de formación» is a shift comment, not a proven cause. There is no comparative observation by experience level.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The A3 and the pilot</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write a light A3: context, current situation with the figures, target, analysis, proposed countermeasures and follow-up plan.
+
+Add a two-week pilot with gemba observation covering: what is observed, against what comparable sample, which metric decides, and the abandonment criterion. Don't propose training as a final action without validation, and don't change the theoretical speed standard inside the pilot.</pre></div>
+<div class="chk"><b>What to check</b>The pilot runs two weeks and has to include an abandonment criterion, per the exercise rules.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Was the OEE multiplied or added?</li>
+<li>Has the theoretical speed been taken as valid without review?</li>
+<li>Has training been prescribed without evidence?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>OEE = 0.91 × 0.82 × 0.98 ≈ 73.1 %. The outdated theoretical speed undermines the basis. «Falta de formación» is a hypothesis, not a cause.</p></details>
+</div></section>
+<section class="case" id="C10"><div class="container">
+<div class="code">Case C10 · Finance · Tax</div>
+<h2>Three-way match with evidence</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C10_THREE_WAY_MATCH</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>A purchase order for 240 units at 18.50 €. A goods receipt of 232. An invoice for 240 at 18.90 € plus a service line of 180 € with no order and no evidence of receipt. The invoice states 21 % VAT, which the exercise gives no way to validate. There is no price addendum on record.</p>
+<p class="files"><b>Deliverable.</b> Reconciliation sheet and exception memo<br><b>Files.</b> <code>orders_receipts_invoices.csv</code> · <code>reconciliation_policy.md</code> · <code>exception_notes.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Reconcile quantity, price, item and document by hand. Mark what can be verified and what needs tax or process review. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The match, before tax</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the documents, the reconciliation policy and the exception notes from a fictional case.
+
+Run the three-way match line by line and before tax. Show the calculation of each difference: quantity difference in units and in value, and unit price difference and its total effect.
+
+Don't get into the tax treatment yet.</pre></div>
+<div class="chk"><b>What to check</b>Quantity invoiced minus received: 8 units. Price difference: 0.40 €/unit across 240 invoiced.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Each exception by its nature</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now classify every exception you found into three categories: accounting discrepancy, contractual discrepancy and tax question.
+
+For each one: which document supports it, which document is missing, and who has the authority to resolve it. Handle the 180 € service line separately and explain why.</pre></div>
+<div class="chk"><b>What to check</b>The 180 € service has no order and no evidence of receipt: it is blocked under the policy.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">What isn't mine to decide</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Tell me explicitly which conclusions I CANNOT draw with this documentation, and in particular on the tax treatment and the applicable rate.
+
+Write the specific question that would have to go to the competent function and what documentation I would attach. Don't determine the tax treatment and don't validate the 21 % rate.</pre></div>
+<div class="chk"><b>What to check</b>If any statement appears about whether the 21 % is correct, the boundary of the exercise has been crossed.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The exception memo</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the reconciliation sheet and a half-page exception memo with: what can be approved today and for what amount, what stays blocked, what documentation is requested and from whom, and what remains pending validation by the competent function.
+
+Include the exact approvable amount before tax and show how you got to it.</pre></div>
+<div class="chk"><b>What to check</b>Only what was received, at the order price, can be approved, absent evidence to the contrary: 232 units at 18.50 €.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has the purchase order been treated as a receipt?</li>
+<li>Has the service been treated as received?</li>
+<li>Has a tax inference been presented as a conclusion?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>Quantity invoiced minus received: 8 units. Price difference: 0.40 €/unit across 240 invoiced. The service has no evidence behind it. No tax treatment is concluded.</p></details>
+</div></section>
+<section class="case" id="C11"><div class="container">
+<div class="code">Case C11 · Personal Assistance · executive support</div>
+<h2>Committee in 20 minutes</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C11_COMMITTEE</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Four agenda blocks, seven consolidated notes and forty minutes of meeting. One operational risk figure that reads 7 in one document and 11 in another. Two unconfirmed attendances. Phone numbers nobody needs for anything.</p>
+<p class="files"><b>Deliverable.</b> Committee brief, timed agenda, email and action log<br><b>Files.</b> <code>committee_agenda.csv</code> · <code>stakeholder_notes.md</code> · <code>committee_constraints.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Design the ideal page on paper: decision, context, people, time and follow-up. Strip out the personal data that serves no purpose. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Classify the items</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the agenda, the consolidated notes and the constraints from a fictional committee.
+
+Classify each item as decision, information, conflict or logistics, and say what the committee needs from each one: to decide, to be informed, to settle a discrepancy, or simply to log it.
+
+Point out which information in the notes is not needed for the briefing.</pre></div>
+<div class="chk"><b>What to check</b>The phone numbers are not needed for the briefing. They have to stay out from this first step.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">An agenda that adds up</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build the timed agenda from 10:00 to 10:40 respecting the constraints: the total has to come to exactly 40 minutes, and the decision gets more time than the information.
+
+Show the sum at the end. If the maximum times in the file don't fit into 40 minutes, say so and propose the adjustment, explaining what you cut.</pre></div>
+<div class="chk"><b>What to check</b>Add the minutes up yourself. Budget needs 20 of the 40.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The conflict that stays visible</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Prepare the briefing block for the operational risk item.
+
+Keep both contradictory figures with their source document. Don't average them, don't pick one, and don't present either as provisional. Frame the decision the committee has to take on them: who validates the figure and by when.</pre></div>
+<div class="chk"><b>What to check</b>7 and 11 both have to appear, with their source. Nobody has been named yet to validate the figure.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Briefing, email and action log</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now write three pieces:
+
+1. The one-page committee brief: per block, the decision required, three lines of context and what has to be read beforehand.
+2. The confirmation email to the attendees, 100 words maximum, without treating any attendance as confirmed and without including unnecessary personal data.
+3. An empty action log, with its columns, ready to be filled in during the meeting.
+
+Don't invent owners or confirmations.</pre></div>
+<div class="chk"><b>What to check</b>The action log has to come out empty. Two attendances are still pending and cannot be treated as confirmed.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Does the timing add up to 40 minutes?</li>
+<li>Is the contradictory figure still visible?</li>
+<li>Has any attendance been treated as confirmed?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>The agenda has to add up to 40 minutes and give 20 to the budget item. The 7/11 operational figure stays contradictory. Two attendances remain pending and phone numbers are left out.</p></details>
+</div></section>
+<section class="case" id="C12"><div class="container">
+<div class="code">Case C12 · Integrated Operations · Plant Operations</div>
+<h2>Shift handover</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C12_PLANT_HANDOVER</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Three sources describe the same stoppage with three different durations: 22 minutes on the paper log, 17 on the sensor and «casi 30» in the shift chat. A guide adjustment was made. Validation by the next shift is still pending. Target output 8,400 units, actual 7,920. Scrap from 1.2 % to 1.9 %.</p>
+<p class="files"><b>Deliverable.</b> Digital shift handover and next-shift checklist<br><b>Files.</b> <code>plant_losses.csv</code> · <code>shift_handover.md</code> · <code>objectives.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Build the handover on paper with status, impact, action taken, conflicting evidence and what needs watching. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The gaps, on the same basis</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the plant losses, the shift handover and the checklist from a fictional case.
+
+Calculate the production gap and the scrap variation, showing the arithmetic and the unit of each result. Be careful with the scrap: say whether the difference is in percentage points or a relative change, and why the distinction matters.</pre></div>
+<div class="chk"><b>What to check</b>Production gap: 480 units. Scrap: +0.7 percentage points, which is a relative increase of 58 %.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Three durations, three sources</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Show me the three stoppage durations, each one kept with its source.
+
+Don't average them, don't pick one, don't discard any. Explain why averaging sources of different reliability would be a mistake here, and what it would take to reconcile them.</pre></div>
+<div class="chk"><b>What to check</b>If a single stoppage figure appears, what the case asks to preserve has been averaged away.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">An adjustment is not a cause</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the status of the event, drawing a precise line between: what was observed, what action was taken, what effect has been observed since, and what is still pending validation.
+
+Don't declare the problem solved and don't name a cause: the file says outright there is not enough evidence for that. Frame what evidence would allow it to be closed.</pre></div>
+<div class="chk"><b>What to check</b>«Se realizó un ajuste de guía» is not the same as «se corrigió la causa». The next shift has to validate stability.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The handover and the checklist</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the digital shift handover with: line status, quantified impact, action taken, conflicting evidence preserved, and what needs watching.
+
+Add the next-shift checklist, adapting the one in the file, with what has to be checked, at what point, and what gets escalated if the anomaly comes back. One page in total, maximum.</pre></div>
+<div class="chk"><b>What to check</b>The checklist has to include confirming the safe state before start-up, and must not declare a cause or a closure without evidence.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Have incompatible sources been averaged?</li>
+<li>Has an adjustment been confused with a cause?</li>
+<li>Has a pending validation been closed out?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>Production gap: 480 units. Scrap: +0.7 percentage points. The durations 17/22/«casi 30» are kept by source; the adjustment is not the same as validation.</p></details>
+</div></section>
+<section class="case" id="C13"><div class="container">
+<div class="code">Case C13 · R&amp;D</div>
+<h2>An experiment that discriminates</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C13_RD_EXPERIMENT</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>R&D wants to improve a texture while holding cost and stability. Three factors at two levels each, a maximum of six runs, a mandatory reference of the base formula, and one response whose unit is still undefined. There is no result to interpret: the experiment hasn't been run.</p>
+<p class="files"><b>Deliverable.</b> Draft protocol and light DOE matrix<br><b>Files.</b> <code>experiment_matrix.csv</code> · <code>rd_hypotheses.md</code> · <code>safety_protocol.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Choose hypothesis, factors, controls and success criterion. Decide what stays under human protocol. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">What can be designed and what can't</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the factor matrix, the hypotheses and the safety protocol from a fictional R&amp;D case.
+
+Before designing anything, tell me what can be designed with this information and what cannot. Point out explicitly which response has an undefined unit and what that means for the later analysis.
+
+Don't propose or invent levels other than the ones authorized in the file.</pre></div>
+<div class="chk"><b>What to check</b>Response 2, viscosity, has its unit undefined. With no unit there is no success criterion.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The design in six runs</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Propose an experimental design that fits in a maximum of six runs, including the base formula reference.
+
+Justify which combinations you choose and what information is lost by not running the full design: say explicitly which effects will end up confounded with each other. Add the randomized run order and why randomization matters here.</pre></div>
+<div class="chk"><b>What to check</b>A full three-factor, two-level design needs eight runs. With six, something gets confounded: it has to say what.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The capture sheet</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Design the data capture sheet: what gets recorded in each run, in what unit, who records it and when.
+
+Include run order, fictional batch, panel observations and any process condition that could matter. Leave the result columns explicitly empty: don't simulate a single value.</pre></div>
+<div class="chk"><b>What to check</b>If any numerical texture or stability result appears, it has invented an experiment nobody ran.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The analysis plan and the gates</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the draft protocol with: hypotheses, factors, design, capture sheet, planned analysis and criterion for moving forward.
+
+The analysis plan has to say what will be calculated once data exists, not what result is expected. Mark explicitly which gates stay under human responsibility in Quality, Safety and R&amp;D, and what this document does not authorize.</pre></div>
+<div class="chk"><b>What to check</b>The protocol does not authorize execution. Quality, Safety and R&D keep the gates.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Have ingredients or parameters been invented?</li>
+<li>Has experimental design been confused with result?</li>
+<li>Do the safety gates stay under human responsibility?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>The design allows a maximum of six runs plus one reference. There are no results to interpret. Safety, Quality and R&D keep the gates.</p></details>
+</div></section>
+<section class="case" id="C14"><div class="container">
+<div class="code">Case C14 · Extension case · IT and procurement</div>
+<h2>RFP without logos</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C14_RFP</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Three vendors have replied. One has SSO on the roadmap for 2027 and data residency as «no aportado». Another is the most expensive and the slowest. The third is the cheapest, the fastest and the one that evidences least. There are empty cells somebody is about to fill in mentally, with optimism.</p>
+<p class="files"><b>Deliverable.</b> Auditable ranking and demo script<br><b>Files.</b> <code>rfp_responses.csv</code> · <code>requirements.md</code> · <code>scoring_model.csv</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Apply the knock-out requirements on paper first. Then work out the ranking without awarding positive points to «no aportado». Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Knock-outs first</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the responses to a fictional RFP, the requirements and the scoring model.
+
+Apply only the knock-out requirements, before scoring anything. For each vendor, say whether it meets, fails or does not evidence each knock-out, quoting its answer verbatim.
+
+A feature on the roadmap does not count as available. «No aportado» is not presumed favorable.</pre></div>
+<div class="chk"><b>What to check</b>Lince Stack has SSO on the roadmap for Q2 2027 and data residency «no aportado»: it does not pass the knock-outs.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Traceable scoring</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>First check that the model weights add up to 100 and say so.
+
+Then score each dimension applying the scoring rule in the file, showing in every cell the piece of the response that supports the score. For empty cells, use an explicit «unknown» category and explain how you handle it; don't give it a zero or an estimated value.
+
+Give me the full table and the weighted total for each vendor.</pre></div>
+<div class="chk"><b>What to check</b>Add the weights: 30 + 20 + 15 + 10 + 15 + 10 = 100. Check that the file's split comes out right.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Uncertainty costs points</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now add an uncertainty column: how many relevant data points from each vendor are unevidenced, and what effect it would have on the ranking if each of those turned out unfavorable.
+
+Give me the ranking in two versions: the nominal one and the reasonable worst case. Say whether the order changes between them.</pre></div>
+<div class="chk"><b>What to check</b>«Roadmap» and «no aportado» are not the same as a failure, but they are not compliance either.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Critical questions and a comparable demo</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the provisional auditable ranking with the exclusions justified, five critical questions per vendor, and a comparable demo script.
+
+The script has to consist of identical scenarios for all three, with the expected observable result in each, so that the demo isn't won by whoever presents best. Include three-year cost, lead time and exit conditions in the final comparison.</pre></div>
+<div class="chk"><b>What to check</b>The script has to be the same for all three. If each demo is tailored to the vendor, it compares nothing.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Do the weights add up to 100?</li>
+<li>Was «roadmap» treated as available?</li>
+<li>Did an empty cell get a zero, an unknown, or an invented estimate?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>An unevidenced knock-out does not score as met. «Roadmap» is not the same as current capability. The comparison has to keep cost, lead time and lock-in in view.</p></details>
+</div></section>
+<section class="case" id="C15"><div class="container">
+<div class="code">Case C15 · IT · Digital Platforms</div>
+<h2>Backlog with value and evidence</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C15_BACKLOG</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Eight requests for an internal portal, all of them urgent. Only two come with ticket evidence: 42 on access and 31 on search. There is an identity dependency pending validation that affects two of the requests. Sprint capacity is 20 points and the eight requests add up to 55.</p>
+<p class="files"><b>Deliverable.</b> Prioritized backlog, sprint options and decision log<br><b>Files.</b> <code>backlog_requests.csv</code> · <code>product_context.md</code> · <code>backlog_policy.txt</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Define the prioritization criterion, separate need from solution, and mark the technical gates. Eight minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Need, not solution</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the requests, the product context and the prioritization policy from a fictional case.
+
+Restate each request, separating the need from the suggested solution: what problem the user has, against what solution somebody has proposed.
+
+Point out which requests arrive already framed as a solution, with no known need behind them.</pre></div>
+<div class="chk"><b>What to check</b>«SSO» and «chatbot» are solutions. The need behind SSO is 42 access tickets; the one behind the chatbot is nowhere on record.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Scoring in the open</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build a scoring model with the five dimensions in the policy —value, risk, evidence, dependency and effort— with visible weights that you add up and show.
+
+Score each request, justifying every score with the data in the file. «Sin evidencia» does not mean no value: treat it as a discovery need, not as a zero on value. Novelty is not a criterion.</pre></div>
+<div class="chk"><b>What to check</b>Only P1 and P2 have evidence. The other six need discovery, not rejection.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Two options that fit</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Propose two different sprint options that stay inside the 20 points of capacity.
+
+Show the point total for each option. Explain what each one is going after, what it leaves out and what risk it takes on. Keep the pending identity dependency visible in both and say what happens if it isn't resolved in time.</pre></div>
+<div class="chk"><b>What to check</b>Add up the points in each option. P1 is 8 and P8 is 13: together they don't fit.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The decision log</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the prioritized backlog and a decision log with: what is decided, on what evidence, what is dropped and why, what stays pending discovery, and who decides in each case.
+
+Add the list of requests that need a conversation with the business before they can be estimated. One page maximum.</pre></div>
+<div class="chk"><b>What to check</b>The decision log has to record why something is dropped, not only what gets in.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has a feature been rewarded for being new?</li>
+<li>Does the capacity add up to 20 at most?</li>
+<li>Is the identity dependency still visible?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>Only access and search have evidence. SSO still carries the identity dependency. Both options have to add up to 20 points at most, and novelty is not a criterion.</p></details>
+</div></section>
+<section class="case" id="C16"><div class="container">
+<div class="code">Case C16 · Integrated Operations · Industrial Excellence</div>
+<h2>Provisional SMED</h2>
+<div class="stripe"><div>Offline<b>8 min</b></div><div>Copilot<b>12 min</b></div><div>Audit<b>7 min</b></div><div>Folder<b>C16_SMED</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Six changeovers timed, between 31 and 54 minutes. Four of the six observations have a partial or unavailable task breakdown. Somebody has asked for a 35-minute standard. Zero recorded safety incidents, which is not the same as zero risk.</p>
+<p class="files"><b>Deliverable.</b> SMED sheet, provisional standard and observation plan<br><b>Files.</b> <code>task_log.csv</code> · <code>redesign_canvas.md</code> · <code>operating_policy.md</code> · <code>brief.md</code></p>
+<h3 class="sub">Offline round · 8 minutes, no computer</h3>
+<p>Work out mean, median and range by hand. Separate internal and external work only where the evidence exists. Ten minutes.</p>
+<h3 class="sub">Copilot round · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The statistics and their quality</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching six changeover observations, the observation sheet and the pilot gates from a fictional case.
+
+Calculate the mean, median and range of the durations, showing the arithmetic. Then assess the quality of the sample: how many observations have a complete breakdown, how many partial and how many unavailable, and which analyses that blocks.</pre></div>
+<div class="chk"><b>What to check</b>Mean = 41.17 min; median = 40.5 min; range = 23 min. Four of six have a partial or unavailable breakdown.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Internal and external, only where it's recorded</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Separate internal from external work only in the observations where the breakdown allows it.
+
+For the four that don't allow it, don't estimate: say what is missing and how it would be captured in the next observation. Also look for which variables in the log correlate with the longest durations, and say explicitly that correlation is not cause.</pre></div>
+<div class="chk"><b>What to check</b>The observations with tools not prepared and a wait on Quality are the longest. That's a signal, not a proven cause.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The 35-minute standard</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Assess the request to set a 35-minute standard with the data available.
+
+Tell me whether the sample supports it, what would happen if it gets set anyway, and why the best observed time does not automatically become the standard. Propose instead a provisional standard with its range, stating explicitly what is outstanding before a definitive one can be set.</pre></div>
+<div class="chk"><b>What to check</b>The 35-minute standard is an aspiration, not a validated figure. The best time, 31 minutes, is not the standard.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The SMED sheet and the plan</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the SMED observation sheet adapted from the file, the provisional standard with its conditions, and the plan for five further observations.
+
+The plan has to state: which changeovers are observed and why they are comparable, who observes, what is measured, and which Safety and Quality gates can stop the pilot. Add what you would measure besides cycle time: variability, rework and quality.</pre></div>
+<div class="chk"><b>What to check</b>Safety and Quality can stop the pilot. Zero recorded incidents does not prove zero risk.</div></div>
+<button class="copyall">Copy all 4 prompts</button>
+<h3 class="sub">Audit · 7 minutes</h3><ul>
+<li>Has the best time been used as the standard?</li>
+<li>Has all the variation been attributed to a single cause?</li>
+<li>Do Safety and Quality stay as gates?</li>
+</ul>
+<details><summary>Facilitator's key — not handed out to participants</summary><p>Mean = 41.17 min; median = 40.5 min; range = 23 min. The best time is not the standard. Four observations have a partial or unavailable breakdown, and Safety and Quality are gates.</p></details>
+</div></section></main>
+<footer><div class="container"><p><b>Copilot Decision Lab · SIGMA</b> — Block B, business cases. Sixteen cases, sixty-four prompts. Training material by Kemp.</p><p style="margin-top:8px">Every scenario, figure, supplier, incident, person and document is synthetic. The facilitator keys are not opened during the offline round.</p></div></footer>
+<button class="top" title="Back to top">↑</button>
+<script>
+const cards=[...document.querySelectorAll('.case')];
+const chips=[...document.querySelectorAll('.chip')];
+const q=document.getElementById('q');
+const cnt=document.getElementById('cnt');
+function norm(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+function filt(){
+  const t=norm(q.value.trim());
+  let n=0;
+  cards.forEach(c=>{
+    const hit=!t||norm(c.innerText).includes(t);
+    c.classList.toggle('hide',!hit); if(hit)n++;
+  });
+  cnt.textContent=n+(n===1?' case':' cases');
+  chips.forEach(ch=>{
+    const id=ch.getAttribute('href').slice(1);
+    const el=document.getElementById(id);
+    ch.style.display=(el&&el.classList.contains('hide'))?'none':'';
+  });
+}
+q.addEventListener('input',filt);
+function flash(b,txt){const o=b.textContent;b.textContent=txt;b.classList.add('ok');
+  setTimeout(()=>{b.textContent=o;b.classList.remove('ok');},1400);}
+function cp(txt,btn,label){
+  const done=()=>flash(btn,label);
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fb());}
+  else fb();
+  function fb(){const ta=document.createElement('textarea');ta.value=txt;
+    ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);
+    ta.select();try{document.execCommand('copy');done();}catch(e){}
+    document.body.removeChild(ta);}
+}
+document.querySelectorAll('.copy').forEach(b=>{
+  b.addEventListener('click',()=>cp(b.parentElement.querySelector('pre').innerText,b,'Copied'));
+});
+document.querySelectorAll('.copyall').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const c=b.closest('.case');
+    const all=[...c.querySelectorAll('.pbox pre')].map((p,i)=>'--- PROMPT '+(i+1)+' ---\n'+p.innerText).join('\n\n');
+    cp(all,b,'Copied all '+c.querySelectorAll('.pbox pre').length+' prompts');
+  });
+});
+const btnTop=document.querySelector('.top');
+addEventListener('scroll',()=>{btnTop.classList.toggle('show',scrollY>700);
+  const y=scrollY+130;let cur=null;
+  cards.forEach(c=>{if(!c.classList.contains('hide')&&c.offsetTop<=y)cur=c.id;});
+  chips.forEach(ch=>ch.classList.toggle('on',ch.getAttribute('href')==='#'+cur));
+});
+btnTop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+filt();
+</script></body></html>

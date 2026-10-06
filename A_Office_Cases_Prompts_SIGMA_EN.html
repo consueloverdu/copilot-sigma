@@ -1,0 +1,926 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cases and prompts · Office work · Copilot Chat · SIGMA</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --hueso:#F7F3EA; --papel:#FFFDF8; --tinta:#1C1B18; --gris:#6E6960;
+ --naranja:#C9581F; --naranja-cl:#E8A57F; --verde:#22422F; --linea:#DED6C4;
+ --caja:#22211D; --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+ --sans:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+ --mono:"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:112px}
+body{background:var(--hueso);color:var(--tinta);font-family:var(--sans);
+ font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.serif{font-family:var(--serif)}
+
+/* ---------- cabecera ---------- */
+header.hero{padding:56px 0 40px;border-bottom:1px solid var(--linea)}
+.container{max-width:920px;margin:0 auto;padding:0 24px}
+.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+ color:var(--naranja);font-weight:700;margin-bottom:18px}
+h1{font-family:var(--serif);font-size:clamp(34px,6vw,58px);line-height:1.04;
+ font-weight:400;letter-spacing:-.01em}
+h1 .k{font-style:italic;color:var(--naranja)}
+.hero .rule{width:72px;height:3px;background:var(--naranja);margin:26px 0 22px}
+.hero .lead{font-family:var(--serif);font-size:19px;line-height:1.5;max-width:640px;color:#33312C}
+.facts{display:flex;flex-wrap:wrap;gap:32px;margin-top:30px;padding-top:20px;
+ border-top:1px solid var(--linea);font-size:12px;color:var(--gris)}
+.facts b{display:block;color:var(--tinta);font-size:15px;font-weight:600;margin-top:2px}
+
+/* ---------- barra pegajosa ---------- */
+.bar{position:sticky;top:0;z-index:50;background:rgba(247,243,234,.94);
+ backdrop-filter:blur(10px);border-bottom:1px solid var(--linea)}
+.bar-in{max-width:920px;margin:0 auto;padding:11px 24px;display:flex;
+ align-items:center;gap:12px;flex-wrap:wrap}
+.chips{display:flex;gap:5px;flex-wrap:wrap;flex:1;min-width:220px}
+.chip{font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:5px 9px;
+ border:1px solid var(--linea);border-radius:6px;background:var(--papel);
+ color:var(--gris);text-decoration:none;transition:.14s;white-space:nowrap}
+.chip:hover{border-color:var(--naranja);color:var(--naranja)}
+.chip.on{background:var(--verde);border-color:var(--verde);color:#F3EFE4}
+#q{font-family:var(--sans);font-size:13px;padding:7px 11px;border:1px solid var(--linea);
+ border-radius:6px;background:var(--papel);color:var(--tinta);width:190px}
+#q:focus{outline:none;border-color:var(--naranja)}
+.count{font-size:11.5px;color:var(--gris);white-space:nowrap}
+
+/* ---------- intro ---------- */
+.howto{padding:34px 0;border-bottom:1px solid var(--linea)}
+.howto h2{font-family:var(--serif);font-size:24px;font-weight:400;margin-bottom:14px}
+.howto p{max-width:700px;margin-bottom:11px;color:#3A3833}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:20px}
+.stepcard{background:var(--papel);border:1px solid var(--linea);border-radius:9px;padding:15px 17px}
+.stepcard .n{font-family:var(--serif);font-size:26px;color:var(--naranja);line-height:1}
+.stepcard b{display:block;margin:6px 0 4px;font-size:14.5px}
+.stepcard span{font-size:13.5px;color:var(--gris);line-height:1.5}
+.warn{margin-top:20px;background:var(--papel);border:1px solid var(--linea);
+ border-left:4px solid var(--naranja);border-radius:0 8px 8px 0;padding:14px 18px;font-size:14.5px}
+.warn b{display:block;margin-bottom:4px}
+
+/* ---------- casos ---------- */
+.case{padding:44px 0;border-bottom:1px solid var(--linea)}
+.case.hide{display:none}
+.code{font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+ color:var(--naranja);font-weight:700;margin-bottom:7px}
+.case h2{font-family:var(--serif);font-size:clamp(26px,4vw,36px);font-weight:400;
+ line-height:1.12;margin-bottom:16px}
+.stripe{display:flex;flex-wrap:wrap;gap:26px;padding:12px 0;margin-bottom:22px;
+ border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);
+ font-size:11.5px;color:var(--gris)}
+.stripe b{display:block;color:var(--tinta);font-size:14px;font-weight:600;margin-top:2px}
+h3.sub{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--gris);
+ font-weight:700;margin:26px 0 9px}
+.case p{margin-bottom:10px;max-width:740px}
+.case ul{margin:0 0 10px 20px}
+.case li{margin-bottom:5px;max-width:720px}
+
+/* ---------- prompt ---------- */
+.step{margin:0 0 22px}
+.step-h{display:flex;align-items:baseline;gap:12px;margin-bottom:9px}
+.step-n{font-family:var(--serif);font-size:24px;color:var(--naranja);line-height:1;min-width:22px}
+.step-t{font-weight:700;font-size:16.5px}
+.pbox{position:relative;background:var(--caja);border-radius:10px;padding:20px 22px 20px}
+.pbox pre{font-family:var(--mono);font-size:13.2px;line-height:1.62;color:#E9E2D3;
+ white-space:pre-wrap;word-wrap:break-word;margin:0}
+.plabel{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--naranja-cl);
+ font-weight:700;margin-bottom:11px;display:block}
+.copy{position:absolute;top:13px;right:13px;font-family:var(--sans);font-size:11.5px;
+ font-weight:700;letter-spacing:.03em;padding:6px 12px;border-radius:6px;cursor:pointer;
+ background:#3A3831;color:#E9E2D3;border:1px solid #4C4941;transition:.14s}
+.copy:hover{background:var(--naranja);border-color:var(--naranja);color:#fff}
+.copy.ok{background:#3E6B4C;border-color:#3E6B4C;color:#fff}
+.why{font-size:14px;color:#4A463F;margin:11px 0 0 34px;max-width:700px}
+.why b{color:var(--tinta)}
+.chk{font-size:14px;margin:9px 0 0 34px;max-width:700px;background:#EFE9DA;
+ border-left:3px solid var(--naranja);padding:10px 14px;border-radius:0 6px 6px 0}
+.chk b{display:block;font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--naranja);margin-bottom:3px}
+.copyall{font-family:var(--sans);font-size:12.5px;font-weight:700;padding:8px 15px;
+ border:1px solid var(--linea);border-radius:7px;background:var(--papel);color:var(--gris);
+ cursor:pointer;transition:.14s}
+.copyall:hover{border-color:var(--naranja);color:var(--naranja)}
+.copyall.ok{background:var(--verde);border-color:var(--verde);color:#F3EFE4}
+
+.callout{background:var(--papel);border:1px solid var(--linea);border-left:4px solid var(--naranja);
+ border-radius:0 8px 8px 0;padding:16px 20px;margin:22px 0;max-width:760px}
+.callout .t{font-weight:700;font-size:14.5px;margin-bottom:5px}
+.callout p{margin:0;font-size:14.5px}
+.learn{font-size:14.5px;color:var(--gris);border-top:1px solid var(--linea);padding-top:14px;max-width:760px}
+.learn b{color:var(--tinta)}
+details{background:var(--papel);border:1px solid var(--linea);border-radius:8px;
+ padding:13px 18px;margin:20px 0;max-width:760px}
+details summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--naranja);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";}
+details[open] summary::before{content:"▾ ";}
+details p{margin:10px 0 0;font-size:14.5px}
+.files{font-size:14.5px;color:var(--gris)}
+.files code{font-family:var(--mono);font-size:13px;background:#EFE9DA;padding:2px 6px;border-radius:4px;color:var(--tinta)}
+
+footer{padding:40px 0 60px;font-size:13px;color:var(--gris)}
+footer b{color:var(--tinta)}
+.top{position:fixed;right:20px;bottom:20px;width:42px;height:42px;border-radius:50%;
+ background:var(--verde);color:#F3EFE4;border:none;cursor:pointer;font-size:17px;
+ display:none;z-index:60;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.top.show{display:block}
+@media print{
+ .bar,.top,.copy,.copyall{display:none!important}
+ body{font-size:11pt;background:#fff}
+ .case{page-break-inside:avoid;break-inside:avoid}
+ .pbox{background:#F0ECE1;border:1px solid #CCC}
+ .pbox pre{color:#1C1B18}
+ .plabel{color:#C9581F}
+ details{border:1px solid #ccc} details[open] summary::before{content:""}
+}
+@media (max-width:640px){
+ .stripe{gap:16px} .why,.chk{margin-left:0}
+ #q{width:100%}
+}
+</style></head><body>
+<header class="hero"><div class="container">
+<div class="kicker">Kemp · SIGMA · Block A</div>
+<h1>Office work with <span class="k">Copilot Chat</span></h1><div class="rule"></div>
+<p class="lead">Twelve working cases with their prompts, ready to copy. Email, documents, spreadsheets, meetings, presentations, contracts and web search.</p>
+<div class="facts"><div>Cases<b>O01 – O12</b></div><div>Tool<b>Copilot Chat · work account</b></div><div>Prompts<b>60, ready to copy</b></div><div>Data<b>Synthetic</b></div></div>
+</div></header>
+<div class="bar"><div class="bar-in">
+<div class="chips"><a class="chip" href="#O01">O01</a><a class="chip" href="#O02">O02</a><a class="chip" href="#O03">O03</a><a class="chip" href="#O04">O04</a><a class="chip" href="#O05">O05</a><a class="chip" href="#O06">O06</a><a class="chip" href="#O07">O07</a><a class="chip" href="#O08">O08</a><a class="chip" href="#O09">O09</a><a class="chip" href="#O10">O10</a><a class="chip" href="#O11">O11</a><a class="chip" href="#O12">O12</a></div>
+<input id="q" type="search" placeholder="Search case, tool, keyword…" autocomplete="off">
+<span class="count" id="cnt"></span>
+</div></div>
+<section class="howto"><div class="container">
+<h2 class="serif">How to use this page</h2>
+<p>Every case comes with its situation, the files you need to attach and a sequence of five
+prompts. <b>Send them one at a time</b>, in the same conversation, checking each answer before
+you move on. Sending them all at once produces a long answer and a worse one.</p>
+<p>The <b>Copy</b> button on each box puts the prompt on your clipboard. The one at the bottom
+of each case copies the whole sequence, if you would rather keep it in a notepad.</p>
+<div class="steps">
+<div class="stepcard"><div class="n">1</div><b>The brief</b><span>Fill in the DATOS sheet on
+paper. Three minutes, no computer. This is what decides the quality of the result.</span></div>
+<div class="stepcard"><div class="n">2</div><b>The conversation</b><span>Attach the file and send
+the prompts in order. Correcting halfway through is part of the method, not a failure.</span></div>
+<div class="stepcard"><div class="n">3</div><b>The handover</b><span>Move the result into Word,
+Excel, PowerPoint or Outlook and review it there. That is where half the errors show up.</span></div>
+</div>
+<div class="warn"><b>Before you start</b>
+Copilot Chat does not write inside your documents, does not change your Excel, does not build the
+pivot table and does not send email: it returns content in the conversation and you do the handover
+yourself. All the case data is synthetic and its gaps are deliberate — do not fill them in with
+real information about the company, customers, plants or people.</div>
+</div></section>
+<main><section class="case" id="O01"><div class="container">
+<div class="code">Case O01 · Outlook · email</div>
+<h2>From email thread to brief</h2>
+<div class="stripe"><div>Mission<b>M02</b></div><div>Duration<b>20 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O01_BRIEF</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Five messages, four people, one verbal promise, one figure nobody has confirmed and a mobile number that has no business being there. Customer Service has to reply before 12:00 and, above all, wants to know who signs the answer.</p>
+<p>The exercise is not to summarize the thread. It is to turn a messy thread into a brief that produces a reply you can defend if the order slips again.</p>
+<p class="files"><b>Who it is for.</b> Customer service, sales, planning, executive assistants. Anyone who gets emails where four people say different things about the same thing.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>order_email_thread.txt</b> — the full thread. It is the only material. No ERP, no customer history, no other file in the pack.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A DATOS brief sheet filled in <i>by hand</i>, before writing the first prompt.</li>
+<li>A one-screen reply to the customer, with no invented dates.</li>
+<li>Three internal lines: what has to be decided today, who has the authority and which piece of data unblocks it.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Separate what is known from what is assumed</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching an internal email thread of five messages about an order. It is a fictional training case.
+
+Before you draft anything, map the situation for me in three separate lists:
+1. Facts confirmed by at least one message, stating who says it and at what time.
+2. Opinions, forecasts and verbal promises.
+3. Information that is missing before anyone can give a date.
+
+Do not propose a reply to the customer yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> If the first prompt asks for the reply, Copilot will fill the gaps so the reply reads well. Asking for the map first forces the gaps into view.</div>
+<div class="chk"><b>What to check</b>The 900 boxes delivered on the 10th and the 500 outstanding belong in list 1. Sales's «jueves o viernes» belongs in list 2, not list 1.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Put a name on the assumptions</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now give me a three-column table —claim, who is making it, what it would take to confirm it— covering everything this thread takes for granted without evidence.
+
+Include the «jueves o viernes» date and the availability of the 620 boxes in location A-12 explicitly. Do not fill in any figure that is not in the thread.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> An assumption with a name and an owner stops being a trap. This is the step that turns the thread into something you can act on.</div>
+<div class="chk"><b>What to check</b>The 620 boxes are allocated to another order: the table has to say that reassigning them is a decision, not a fact.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The reply to the customer</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Draft the reply to Distribuciones Almenar under these conditions:
+
+— 150 words maximum, professional and direct, no repeated apologies.
+— Confirm only what is confirmed: the partial delivery of 900 boxes on Thursday the 10th.
+— Give no delivery date for the remaining 500. Explain what it depends on and say when we will report back.
+— Do not mention the internal status of the lot, the cycle count, or any other customer's name.
+— Close with one concrete commitment we can actually keep today.
+
+After the text, on a separate line, say which person in the organization should approve it before it goes out.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The limits belong inside the brief, not in the clean-up afterwards. Drafting and then cutting things out costs twice as much and something always slips through.</div>
+<div class="chk"><b>What to check</b>Count the words. Hunt for any date: there must be no new one. Check that lot L-441 does not appear.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Data hygiene</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Review your own reply and tell me whether it contains any personal data that is not needed to settle the request. Also tell me which personal data appears in the original thread and should not have been circulated in an email copied to five people.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Data minimization is not a legal formality: it is part of the craft. And in a classroom you learn it better by pointing at the actual field than by quoting the regulation.</div>
+<div class="chk"><b>What to check</b>The mobile number 611 22 33 44 cannot appear in the reply. It has to be flagged as unnecessary data in the thread.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">The decision still open</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To finish, prepare a three-line block I can paste into the internal email: what decision has to be made today, who has the authority to make it and which piece of data unblocks it. Nothing else: three lines.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The email to the customer closes the outside conversation. This block opens the inside one, which is where the real problem is.</div>
+<div class="chk"><b>What to check</b>The decision has to be «reassign the 620 boxes or not», not «give a date». The data that unblocks it is the status of lot L-441.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The thread is crying out for a summary, and a summary is useless: nobody is going to read the five messages again, they are going to read the reply. The second trap is finer: «jueves o viernes» is written in the thread, so it looks like a fact. Sales said it on the phone. Copying it turns one person's promise into a company commitment.</p></div>
+<p class="learn"><b>What you learn:</b> That the quality of the output is decided before you write the prompt, at the moment you define which artifact is needed and for which decision.</p>
+</div></section>
+<section class="case" id="O02"><div class="container">
+<div class="code">Case O02 · Word · documents</div>
+<h2>Reading a long procedure without getting lost</h2>
+<div class="stripe"><div>Mission<b>M03</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O02_SUMMARY</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>A goods-receipt procedure with ten sections, a version history and an FAQ annex. In force since March. Half the night shift has never read it end to end and the other half remembers the previous version.</p>
+<p>You have to walk out with two things: a summary a shift supervisor can read in two minutes, and a cheat sheet that works on the loading dock at seven on a Tuesday morning.</p>
+<p class="files"><b>Who it is for.</b> Operations, quality, warehouse, application support — anyone who has to apply a procedure they did not write.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>receiving_procedure_v3.docx</b> — the full procedure with its change history and FAQ annex.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A 200-word executive summary written for action.</li>
+<li>An operating table: situation → what I do → who decides → what record I leave.</li>
+<li>A list of the document's contradictions, overlaps and gaps.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The map before the summary</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional internal procedure. Before you summarize it, map it for me:
+
+1. The real table of sections, one line per section.
+2. Which function each section binds (warehouse, quality, purchasing, production).
+3. Which sections contain a decision and which merely describe.
+
+Do not summarize yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A long document reads badly because you never know where you are. The map gives you the geography; the summary comes afterwards.</div>
+<div class="chk"><b>What to check</b>Sections 6 and 7 should come out as the ones containing decisions. 3 and 8 are descriptive.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The summary with a reader</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now write a summary of no more than 200 words for a shift supervisor who has not read the document and who clocks in at 06:00.
+
+It should answer: what changes compared with what they used to do, what they can decide on their own, what they have to escalate and what they always have to put on record.
+
+Don't use the procedure's own words if there is a clearer one. Leave out the purpose and scope sections.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Summarize this» produces a summary of the document. «Summarize this for this person, who is about to do this» produces a useful summary. It is the difference between a map and a route.</div>
+<div class="chk"><b>What to check</b>It has to mention documentary release (4.2) and urgent consumption (7.1), which are what version 3.0 brings in.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The loading-dock table</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build a four-column table —situation detected, what I do, who decides, what record I leave— covering every situation the procedure provides for.
+
+Use only what the document says. If a situation appears in the text but it does not say who decides, write «no consta en el procedimiento» in that cell. Do not infer it.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Not stated» is a legitimate and very valuable answer: it shows where the procedure has a hole that real life fills with habit.</div>
+<div class="chk"><b>What to check</b>Section 5 says «según proceda» without saying who decides, and 7.2 does not say who authorizes the record with a real date. Some cell has to say «no consta».</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Contradictions and gaps</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Go through the document looking specifically for:
+
+1. Sections that contradict or overlap each other.
+2. Rules that depend on another procedure or document that is not attached.
+3. Indicators with no target defined.
+4. Terms used without being defined in section 3.
+
+Cite the exact section for every finding. If you find nothing in one of the categories, say so instead of forcing a finding.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Explicitly allowing it to find nothing cuts invention sharply. Without that sentence, the model tends to deliver something in every category.</div>
+<div class="chk"><b>What to check</b>Section 7.1 allows consumption without a goods-receipt number; 4.4 forbids it except for that exception. The documentary-release indicator has no target. Three procedures are cited (PR-LOG-021, PR-COM-006 and PR-RD-003) that are not attached.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">The cheat sheet</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Turn it into a one-side cheat sheet to pin up on the dock: 12 lines maximum, plain language, no hierarchical numbering. Only what has to be done and what must never be done.
+
+Add a closing line stating which version and date of the procedure it comes from.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The artifact people actually use is not the summary: it is the cheat sheet. And the version reference at the foot is what stops someone still applying 2.1 a year from now.</div>
+<div class="chk"><b>What to check</b>Twelve lines or fewer. The version reference has to say 3.0 and 1 March 2026.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The document contains a real contradiction between section 4.4 and section 7.1, and an indicator with no target. A well-written summary smooths them over: it turns them into flowing prose and they vanish. The elegant summary is the enemy here.</p></div>
+<p class="learn"><b>What you learn:</b> That summarizing means discarding, and that discarding without knowing who for is the same as drawing lots.</p>
+</div></section>
+<section class="case" id="O03"><div class="container">
+<div class="code">Case O03 · Excel · data</div>
+<h2>Dirty data before you analyze it</h2>
+<div class="stripe"><div>Mission<b>M04</b></div><div>Duration<b>30 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O03_CLEANING</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>A 67-row material master nobody has maintained. Four suppliers spelled eleven ways. Units in kilos, kg, KG and Kg. Dates in four formats. Prices Excel treats as text because they carry a comma. One price of 4,820 € that sticks out a mile.</p>
+<p>Nobody is going to analyze anything with this file. The exercise is to produce the diagnosis and the clean-up plan, not the clean-up itself: Copilot Chat cannot touch your Excel.</p>
+<p class="files"><b>Who it is for.</b> Everyone. It is the case that recurs most often in a real job and the one that eats the most time without anyone logging it.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>dirty_materials_master.xlsx</b> — the MAESTRO sheet with 67 rows and the LEEME sheet with the warnings.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A data-quality sheet: which problems exist, how many rows each one affects and how serious it is.</li>
+<li>A table of normalization rules, one per problem, with the decision taken.</li>
+<li>A list of what <i>cannot</i> be fixed without asking somebody.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Diagnosis, not clean-up</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional and deliberately dirty material master. I don't want you to clean it: I want the diagnosis.
+
+Give me a table with: type of problem, column affected, how many rows show it, a literal example from the file, and why it blocks analysis.
+
+Cover at least: duplicates, units of measure, date formats, numbers stored as text, blank cells, naming inconsistencies and outliers.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Asking for a count per problem turns an impression («this file is a disaster») into a scope («four duplicates and eleven spellings of the supplier name»), which is what lets you size the work.</div>
+<div class="chk"><b>What to check</b>It should find 4 duplicate codes, 11 supplier spellings for 4 real suppliers and 26 prices stored as text. Cross-check against the LEEME sheet.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The rules, with the decision stated</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>For each problem, propose a normalization rule in this format: problem, proposed rule, the decision I am taking by applying it, the risk of applying it wrongly.
+
+I care most about the decision column: I want to see what I am taking for granted when I unify. Do not turn any empty value or any «n/d» into zero.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Unifying «kilos» and «kg» is harmless. Turning «n/d» into 0 destroys information and nobody notices until someone calculates an average. The decision column makes the difference visible.</div>
+<div class="chk"><b>What to check</b>The minimum-stock rule has to treat blank, «n/d» and zero as three different states.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">How I do it in Excel</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now give me, for the three most expensive rules, the concrete steps in Excel: which function or which tool I use, in what order, and what I check after each step.
+
+If there is a formula way and a Power Query way, give me both and say when each one is the better choice. Write the formulas out in full, ready to paste, saying which cell they go in.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Copilot Chat cannot run anything in your workbook. What it can give you is a reproducible recipe, and a recipe that tells you what to check after each step beats a macro you don't understand.</div>
+<div class="chk"><b>What to check</b>Test one of the formulas in the real file. If it doesn't work first time, say so in the chat and ask for the fix: that back-and-forth is the exercise.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">What I can't decide on my own</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now split the problems into two groups: the ones I can settle myself by applying a rule, and the ones that need somebody to decide or to supply information.
+
+For the second group, write the exact question and which function I would put it to. Do not propose a default rule for those.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This is the line between cleaning data and faking it. The outlier price and the near-empty rows are not fixed by personal judgment.</div>
+<div class="chk"><b>What to check</b>The 4,820 € price and the near-empty MAT-9999 row have to land in the second group.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">The sheet for the data owner</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write a half-page sheet for the person who owns the master: current state in three lines, the three problems with the most impact, the rough effort to fix them, and what breaks if they are not fixed.
+
+No Excel jargon. This person is not going to open the file.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Data work only gets prioritized when somebody with a budget understands the consequence. Translating it is part of the craft, not an extra.</div>
+<div class="chk"><b>What to check</b>The sheet must not contain the words «Power Query» or any formula.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>«Clean the file for me» is the natural request and the wrong one. Copilot Chat does not modify the workbook, so it will return a clean table in the chat that looks like the result and isn't: you lose it the moment you close the conversation, and you don't know which decisions it took along the way. The second trap: left to normalize without instructions, «n/d» becomes zero.</p></div>
+<p class="learn"><b>What you learn:</b> That cleaning data is a chain of decisions, not a technical operation, and that every decision has to be one you can name.</p>
+</div></section>
+<section class="case" id="O04"><div class="container">
+<div class="code">Case O04 · Excel · calculation</div>
+<h2>Formulas you can defend</h2>
+<div class="stripe"><div>Mission<b>M04</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O04_FORMULAS</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Eight references, three lines, a current standard cost and one question from the top: where is the money going? The file has a unit trap planted on purpose and another one in the calculation base.</p>
+<p>At the end of this case we don't want a figure: we want a formula you can explain in a committee meeting and a test case that proves it is right.</p>
+<p class="files"><b>Who it is for.</b> Controlling, industrial, revenue management, purchasing. And anyone who has ever presented a number they couldn't defend.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>packaging_line_costs.xlsx</b> — the COSTES sheet (8 references), the ESTANDAR sheet (current standard cost) and the LEEME sheet with the unit warnings.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A full unit-cost formula, written out and explained.</li>
+<li>A variance table against standard, sorted by impact.</li>
+<li>A test case somebody else can redo by hand.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Understand before calculating</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional cost file. Before you calculate anything, explain what each column means and which unit it is expressed in.
+
+Flag explicitly any column whose unit is not comparable with the others, and any concept that might be measuring two different losses. Do not propose a formula yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A unit error is not caught by looking at the result: the result comes out, and it comes out plausible. It is only caught beforehand, by reading the headers.</div>
+<div class="chk"><b>What to check</b>It has to flag that labor is in cents per unit while everything else is in euros, and that scrap in percent and rejects in units are not the same loss.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The formula, with the conversion in plain sight</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now build total cost and cost per unit for each reference.
+
+Conditions:
+— Write the formula in plain language first and in Excel syntax afterwards, naming the columns.
+— Make any unit conversion explicit as a step of its own; don't hide it inside the formula.
+— Calculate cost per unit two ways: over units produced and over good units. Explain how they differ and which one you would use to compare against standard.
+
+Show the result in a table with the eight references.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Asking for both bases heads off the argument that comes later. And a conversion hidden inside a bracket is a time bomb for the next person who opens the file.</div>
+<div class="chk"><b>What to check</b>MIX-200 should come out around 2.07 €/good unit and CLARO-1 around 1.12 €. If labor has been added as euros, the numbers shoot up: that's the tell.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Where the problem is</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Compare cost per good unit against the standard cost in the ESTANDAR sheet and give me a table sorted by percentage variance, with the euro impact of each variance.
+
+Then, in a short paragraph, tell me which references deserve attention and which are within reason. Do not propose actions yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Sorting by percentage without looking at the absolute euros leads you to chase small references. Asking for both columns forces you to look at the real impact.</div>
+<div class="chk"><b>What to check</b>MIX-100 and MIX-200 should come out around +35 % and +36 %. SUR-500 around +10 %. The rest, inside ±2 %.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Cost or price: not the same thing</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now add unit selling price to the table and calculate the margin per unit of each reference.
+
+Split the references into two groups: those whose problem is in the cost —variance against standard— and those whose problem is in the price —cost is at standard but the margin is negative. Explain why the corrective action is different in each group.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This is the most useful moment of the case. Without this split, a negative margin gets taken to the plant, and the plant can do nothing because it is producing at standard.</div>
+<div class="chk"><b>What to check</b>CLARO-1 has to land in the price group: it is at standard and its margin is negative. MIX-100 and MIX-200 have both problems at once.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">The test case</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To finish, write a test case for reference SUR-500 that somebody else can redo with a calculator: every starting figure, every intermediate operation and the expected result to two decimals.
+
+If my Excel formula gave a different result from this manual calculation, tell me the three most likely causes.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A number you can't reproduce by hand is a number you can't defend in a committee. And the three likely causes are next time's checklist.</div>
+<div class="chk"><b>What to check</b>Redo the calculation yourself on your phone. If it doesn't match, the one that's wrong may be Copilot: say so in the chat and ask it to check.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>Labor is in cents. Added as euros, the unit cost of every reference multiplies and the conclusion still looks coherent because they all move together. It is the worst kind of error: the one that breaks nothing.</p></div>
+<p class="learn"><b>What you learn:</b> That a formula is only worth something if you can say it out loud and somebody else can redo it without you.</p>
+</div></section>
+<section class="case" id="O05"><div class="container">
+<div class="code">Case O05 · Excel · analysis</div>
+<h2>From the table to the business question</h2>
+<div class="stripe"><div>Mission<b>M04</b></div><div>Duration<b>30 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O05_PIVOT_TABLE</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Four hundred and thirty-one rows of 2026 sales by channel, region, reference and salesperson. The request that lands is «analyze this». That isn't a request: it's a brief with no decision behind it.</p>
+<p>This case starts the other way round from the rest. First you decide which question is worth asking, and only then do you touch the file.</p>
+<p class="files"><b>Who it is for.</b> Revenue management, sales, regional management, controlling.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>Good_channel_sales_2026.xlsx</b> — the VENTAS sheet with 431 rows (weeks S01 to S35) and the LEEME sheet with the warnings for the exercise.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>Five questions this file can answer and three it can't.</li>
+<li>A reproducible pivot-table recipe, step by step.</li>
+<li>Three findings with the evidence beside them and a list of what cannot be concluded.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">What this file can and cannot answer</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional sales file. Don't analyze it yet.
+
+Tell me first: five business questions this data can answer solidly, and three questions somebody might ask that this data does NOT allow you to answer, explaining what is missing in each case.
+
+Be specific: «which channel has the best margin?» is not answerable if there is no cost.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This step saves half the time of the case and heads off 90 % of the false conclusions. A question you can't answer is information, not a failure.</div>
+<div class="chk"><b>What to check</b>«Did the promotion work?» has to be among the unanswerable: there is no control group. Margin too: there is no cost.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Define before you measure</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm going to analyze revenue and returns. Before calculating, write the exact definition of each metric you are going to use, with its formula:
+
+— net units
+— gross revenue
+— net revenue
+— return rate
+— promotional spend as a share of revenue
+
+For each one, state which decision you are taking by defining it that way and which alternative definition would be just as defensible.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Two people with the same file reach different numbers because they define «revenue» differently. Writing the definition first turns a three-day argument into a five-minute one.</div>
+<div class="chk"><b>What to check</b>Promotional spend has to be subtracted in net revenue, not ignored.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The pivot-table recipe</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Tell me how to build, in Excel, a pivot table showing net revenue and net units by channel and by month, with the references as a filter.
+
+Give me the exact steps: which field goes in rows, which in columns, which in values, which calculated field I need to create and with what formula, and what formatting I apply. Warn me about the two most common mistakes when setting it up.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Copilot Chat cannot build the pivot table inside your workbook. What it gives you is the recipe, and a recipe with the usual mistakes flagged is worth more than a finished file you couldn't rebuild.</div>
+<div class="chk"><b>What to check</b>Actually build it. Total net revenue should come to around 2.16 million euros; if you get a lot more, you probably haven't subtracted returns or promotional spend.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Three findings with evidence</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now yes: give me the three most relevant findings in this data.
+
+For each one: the finding in one sentence, the figures that support it, the exact filter I would have to apply to see it myself, and the confidence level —high, medium or low— with the reason.
+
+Don't include any finding about the effect of the promotion.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «The exact filter to see it myself» is the instruction that turns a claim into something checkable in thirty seconds.</div>
+<div class="chk"><b>What to check</b>Check one of the three filters. Distributor and large-format retail should account for roughly 80 % of net revenue between them.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">What can't be said</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To close, write the «What this data does not allow us to claim» section of my report. Five points maximum.
+
+Include explicitly why the rise in units during the promotion weeks cannot be attributed to the promotion itself, and what would have had to be set up to be able to claim it.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This section is what makes people believe the rest of the report. An analysis with no limits declared reads like a sales pitch.</div>
+<div class="chk"><b>What to check</b>It has to mention the absence of a control group and the possible cannibalization between references.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>Weeks 14, 15, 26, 27 and 33 have a promotion and higher units. The conclusion «the promotion worked» writes itself. There is no control group, no competitor price, and two references share a consumption occasion: the volume may have come from the next aisle over.</p></div>
+<p class="learn"><b>What you learn:</b> That analyzing is not calculating, but choosing the question and declaring how far the answer reaches.</p>
+</div></section>
+<section class="case" id="O06"><div class="container">
+<div class="code">Case O06 · Teams · Word · meetings</div>
+<h2>Minutes that hold up</h2>
+<div class="stripe"><div>Mission<b>M06</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O06_MINUTES</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>An automatic transcript of a planning committee. The meeting ran 38 minutes and the recording cut out at minute 13. Four of the six registered attendees appear. There is one agreement with a caveat, one action with no owner, one figure nobody remembers and two contradictory figures about the same thing.</p>
+<p>This is the case where Copilot can most easily make you look bad: a handsome set of minutes stating things nobody said.</p>
+<p class="files"><b>Who it is for.</b> Executive assistants, department heads, anyone who writes up minutes. And anyone who receives them.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>planning_meeting_transcript.txt</b> — automatic transcript with its errors and its metadata at the foot.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>Minutes in three separate blocks: decisions, actions and open items.</li>
+<li>A follow-up email ready to review, not to send.</li>
+<li>A visible warning about the coverage of the transcript.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Classify before drafting</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching the automatic transcript of a fictional meeting. Before you draft the minutes, classify what happens in it into four groups, citing the timestamp of each item:
+
+1. Decisions taken.
+2. Actions committed to.
+3. Topics discussed with no conclusion.
+4. Figures mentioned that are in doubt or contradictory.
+
+Do not draft the minutes yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A decision and an intention look very much alike in a transcript. Separating them before drafting stops the prose from fusing them.</div>
+<div class="chk"><b>What to check</b>The date-commitment rule is a decision, with Leticia's caveat. The two-scenario proposal is an action. The Maintenance item is a topic sent back.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">What the transcript doesn't cover</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now check the metadata and the text itself and tell me:
+
+— How long the meeting ran and up to which minute the transcript reaches.
+— How many people are registered and how many appear speaking.
+— What that implies for the minutes.
+
+Be literal: do not assume what was discussed in the unrecorded part.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This is the step almost nobody takes and the one that avoids the serious error. Minutes covering 13 of 38 minutes without saying so are an involuntary forgery.</div>
+<div class="chk"><b>What to check</b>38 minutes on record, transcript up to 13. Six people registered, four speak.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The minutes</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now draft the minutes with this fixed structure:
+
+1. Header: date, duration, attendees on record.
+2. Decisions: what was decided and with what caveat, if any.
+3. Actions: what, who and by when. If the owner or the date is not on record, write «unassigned» or «no date». Do not infer them.
+4. Open items and conflicting figures: keep both contradictory figures with their source. Do not average them or pick one.
+5. Coverage warning.
+
+One page maximum. Plain language.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Unassigned», in black and white, is what makes somebody assign themselves at the next meeting. Minutes that hand out invented owners generate nothing.</div>
+<div class="chk"><b>What to check</b>«Alguien lo escribe y lo circulamos» has to appear as an unassigned action. Both film figures, 6 % and 8 %, have to appear.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The follow-up email</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Prepare the follow-up email for the six people invited. 120 words maximum.
+
+It has to: restate the two actions with dates, ask explicitly for an owner to be assigned to the action that has none, and ask whoever is responsible to confirm the disputed figure in writing.
+
+Don't treat anyone's attendance as confirmed. Don't paste the minutes into the body of the email.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The email is not a summary of the minutes: it is the lever. Its only job is to get the three missing things.</div>
+<div class="chk"><b>What to check</b>Count the words. Check that it doesn't state who attended.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">Auditing your own minutes</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Act as a skeptical reviewer of your own minutes. Go through them sentence by sentence and mark up for me, in a table: which sentences are backed by a specific timestamp, which are your interpretation, and which you cannot support with the transcript.
+
+Rewrite or delete the ones in the last two groups.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This is the pack's counter-prompt applied to your own text. It is surprising how many sentences in well-written minutes have nothing behind them.</div>
+<div class="chk"><b>What to check</b>Any sentence about the unrecorded part has to go.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The transcript cuts off halfway and the model, unless you stop it, will draft complete and coherent minutes of a meeting it only half knows. The second trap: «alguien lo escribe» turns very easily into «Julián lo escribe», because he was the one running the meeting.</p></div>
+<p class="learn"><b>What you learn:</b> That minutes are worth what they leave open, not how neatly they close.</p>
+</div></section>
+<section class="case" id="O07"><div class="container">
+<div class="code">Case O07 · Outlook · email</div>
+<h2>The difficult email</h2>
+<div class="stripe"><div>Mission<b>M02</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O07_EMAIL</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>A supplier is claiming a 4,800 € penalty, argues it well, recalls eighteen months of good service and closes by threatening to suspend orders. It wants an answer this week.</p>
+<p>You have to reply today without promising any of what is being asked, without sounding defensive and without closing the door. And without committing the company to a reading of the contract that is not the writer's to make.</p>
+<p class="files"><b>Who it is for.</b> Purchasing, quality, customer service, any manager handling suppliers or claims.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>supplier_complaint.txt</b> — the email received.</li>
+<li><b>response_policy.txt</b> — what is confirmed, what isn't, who decides what and what cannot be promised.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>Three versions of the reply: short acknowledgement, full answer and internal escalation note.</li>
+<li>An explicit list of commitments the reply does NOT make.</li>
+<li>The request for evidence that has to go to the supplier.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Take the email apart</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a supplier's claim email and an internal document with our limits. Both are fictional.
+
+Split the email into three columns for me: facts our document confirms, supplier claims we can neither confirm nor deny with what we have, and pressure elements —deadlines, threats, appeals to the relationship.
+
+Do not draft any reply yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Separating the pressure from the argument is what lets you answer the argument. Together, you end up answering the tone.</div>
+<div class="chk"><b>What to check</b>The seven-day delay and the 41 previous orders are confirmed. That the change in grammage caused the delay is not.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">What I can't promise</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Working only from the limits document, give me the list of what my reply canNOT do: what I can't promise, what I can't interpret and which decisions aren't mine to make.
+
+Add who does have authority over each of those decisions.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Having that list in front of you while you draft is what stops the friendly sentence that commits you to a credit note.</div>
+<div class="chk"><b>What to check</b>The credit note, its date and the reading of the clause all have to be on the list. Authority sits with the Purchasing Director and Legal.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Three versions</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now draft three versions of the reply:
+
+A) Acknowledgement of receipt, 60 words maximum, to send today.
+B) Full answer, 200 words maximum: confirms the facts on record, does not interpret the clause, asks for the missing evidence, says who will review the case and within what timeframe, and makes clear that the commercial relationship continues meanwhile.
+C) Internal escalation note to the Purchasing Director, 120 words maximum, with the recommendation and what is missing in order to decide.
+
+In none of the three use conditionals that sound like a commitment («we will look into the possibility of issuing a credit note»).</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The three versions aren't alternatives: they are three pieces of the same move. The acknowledgement buys time, the full answer fixes the position and the internal note moves the decision.</div>
+<div class="chk"><b>What to check</b>No version may contain the words «credit note» as something we are going to do.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Hunting the implicit commitments</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Review the three versions and point out any sentence a supplier's lawyer could read as an admission of liability, a promise of a deadline or an acceptance of their reading of the contract.
+
+For each one, propose alternative wording that says the same thing without committing us.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The implicit commitment is almost never in what is asserted: it is in the order of the sentences and in the adverbs.</div>
+<div class="chk"><b>What to check</b>Sentences along the lines of «we understand your claim» or «we apologize for the error» deserve a second look.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">The evidence I ask for</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To finish, write the concrete request for documentation we should make to the supplier: which exact document, what it has to evidence and why we need it in order to review the case.
+
+Four lines maximum and in a tone that doesn't read as defensive paperwork.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The claim gets settled with a document, not with an argument. Asking for it well and early shortens the matter by weeks.</div>
+<div class="chk"><b>What to check</b>It has to ask for the formal change order of 21 August, if it exists, and its approval by Purchasing.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The email is well written and partly right, which pushes you to concede something to take the heat out. The threat to suspend orders adds urgency. Any reply that fixes a concrete review date without having one, or that accepts that the change in grammage caused the delay, has already decided the case.</p></div>
+<p class="learn"><b>What you learn:</b> That replying fast and not committing yourself are not opposing goals, as long as you separate the facts from the pressure first.</p>
+</div></section>
+<section class="case" id="O08"><div class="container">
+<div class="code">Case O08 · PowerPoint · presentation</div>
+<h2>A presentation with an argument</h2>
+<div class="stripe"><div>Mission<b>M07</b></div><div>Duration<b>30 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O08_PRESENTATION</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>A quarterly Operations report in seven sections. It has to go to the committee in ten slides and fifteen minutes, with four concrete asks that need a decision.</p>
+<p>The usual mistake is turning each section into a slide. That isn't a presentation: it's the report with smaller type and more white space.</p>
+<p class="files"><b>Who it is for.</b> Operations, industrial, IT, anyone who presents to a committee. And anyone who prepares presentations for someone else.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>quarterly_operations_report.docx</b> — the full report with indicators, line-by-line analysis, costs, risks and asks.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>The message of the quarter in one sentence.</li>
+<li>A ten-slide script with each slide's message, not its topic title.</li>
+<li>Speaker notes and the three predictable committee questions with their answers.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The message before the structure</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional quarterly Operations report.
+
+Tell me, in a single sentence of no more than 25 words, what the message of the quarter is: not what happened, but what the committee should conclude.
+
+Then give me two alternative sentences that also hold up with the same data and explain how they differ.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The alternatives are the trick. Ask for one sentence and you accept it. With three, you choose, and choosing is what gives the presentation a direction.</div>
+<div class="chk"><b>What to check</b>The report says the problem isn't producing less but producing with more variability. If the message that comes out is «we improved volume», it has stayed on the surface.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The script, one message per slide</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Build a script of exactly 10 slides for 15 minutes.
+
+For each one: number, the slide's message written as a full sentence —not a topic title like «Costs»—, the three figures that support it and which visual element fills it.
+
+Conditions: slide 1 has to carry the message of the quarter; the four asks to the committee need room of their own and enough of it; no slide may carry more than 30 words of text.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A topic title leaves the committee guessing what they should think. A message in the form of a full sentence does the work. It is the difference between «Service» and «Service is falling because of allocation rules, not capacity».</div>
+<div class="chk"><b>What to check</b>No slide may be called «Introduction», «Context» or «Conclusions».</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The data and the chart</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>For the four indicator slides, tell me exactly which chart you would use, with which data from the report and why that chart type and not another.
+
+If a figure you would need isn't in the report, say so instead of estimating it. Also tell me which chart you would NOT use and why.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Say so instead of estimating it» is the instruction that heads off invented series. A trend chart needs more than two points, and the report only has two quarters.</div>
+<div class="chk"><b>What to check</b>There is no historical series: only Q2 2025 and Q2 2026. Any monthly-evolution chart would be invented.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">Speaker notes</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write the speaker notes for slides 1, 5 and 10. 80 words maximum each, in spoken language, not written.
+
+In each note include the transition to the next slide and the figure that has to be said out loud even though it isn't on screen.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Spoken language, not written» changes the result completely. And the figure you say but don't project is what keeps the presentation from being a document read aloud.</div>
+<div class="chk"><b>What to check</b>Read them out loud. If you stumble, they are written, not spoken.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">The committee's questions</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Anticipate the three most uncomfortable questions the committee will ask about this presentation.
+
+For each one: the question as they would put it, the answer I can actually give with the report in hand, and if I can't answer it, exactly what I would say instead of improvising.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The third part —what do I say when I don't know— is what saves the meeting. You prepare it like everything else.</div>
+<div class="chk"><b>What to check</b>«How much does the November shutdown cost?» has no answer in the report: it is declared as an unquantified risk.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The report has seven sections and the temptation is seven slides plus cover, contents and closing. That makes ten and it looks like a fit. But then the four asks to the committee —the only thing that requires a decision— end up piled onto the last one.</p></div>
+<p class="learn"><b>What you learn:</b> That a presentation is a sequence of messages, not a table of contents with formatting.</p>
+</div></section>
+<section class="case" id="O09"><div class="container">
+<div class="code">Case O09 · PDF · long documents</div>
+<h2>Interrogating a tender spec</h2>
+<div class="stripe"><div>Mission<b>M03</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O09_PDF</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Thirteen sections and three annexes that aren't attached. Service levels, penalties with caps that overlap, a price-review index the spec never names and a data processing agreement to be annexed later.</p>
+<p>The question to answer is not «what is this tender about?» but «what would we be binding ourselves to, and what don't we know yet?».</p>
+<p class="files"><b>Who it is for.</b> Purchasing, IT, facilities, quality. And anyone who signs or reviews service contracts.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>maintenance_tender_demo.pdf</b> — the full thirteen-section tender spec.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A table of obligations with the section that imposes each one.</li>
+<li>A calculation of maximum penalty exposure, with its caps.</li>
+<li>A list of open points and the questions to put before bidding.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The map of obligations</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional tender spec. Build me a table of obligations with four columns: obligation, who it binds —contractor or client—, exact section of the spec, and deadline, if there is one.
+
+Go through the whole document. If an obligation appears in two sections with different wording, flag it.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A tender spec reads badly in order. Reordering it by obligation and by bound party is what lets you see how the risk is actually shared.</div>
+<div class="chk"><b>What to check</b>The deadlines in section 5 have to appear, those in 8 (60 days to pay plus 10 working days for sign-off) and those in 13 (20 calendar days to submit).</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">The financial exposure</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Analyze section 6 and tell me what the maximum penalty exposure is:
+
+1. Per event, for a critical call that misses both response and resolution.
+2. Per month, in the worst case of the preventive maintenance plan.
+3. Over the full year, taking the annual cap into account.
+
+Show the calculation for each. Flag whether any of the caps overlap, or whether the annual cap can be reached before the per-event caps are exhausted.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The caps in a tender are rarely additive and almost never read together. This calculation is the difference between bidding with a margin and bidding blind.</div>
+<div class="chk"><b>What to check</b>Per critical event: up to 3,000 € for response plus 6,000 € for resolution, so 9,000 €. Annual cap: 8 % of the annual contract value.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">What the spec doesn't say</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now give me the list of open points in the spec: everything that drives the price or the risk and that the document leaves unspecified.
+
+For each one: what is left open, which section it appears in, and what impact it has on the bid —price, timing or risk. Do not propose questions yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Separating the finding from the question keeps the list from turning into a questionnaire and losing things along the way.</div>
+<div class="chk"><b>What to check</b>The price-review index (section 7), the data agreement (section 10) and the three annexes that aren't attached all have to be on the list.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The questions to the contracting authority</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Turn that list into formal questions to submit within the clarification window.
+
+Ten questions maximum, ordered by impact on the price. Each one in a single sentence, no preamble, worded so that the answer is verifiable and not an opinion.
+
+Tell me what the submission deadline is according to the spec itself.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A badly worded question gets an answer that commits to nothing. «Will the index be clarified?» is no use; «Which specific index applies to the annual review?» is.</div>
+<div class="chk"><b>What to check</b>The deadline is seven calendar days before the end of the submission period (section 13).</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">Bid or no bid</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To finish, give me a decision checklist of no more than eight points for the committee to decide whether we bid.
+
+Each point has to be a check with a yes or no answer, not an assessment. Mark which ones are knock-outs: if the answer is no, we don't bid.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A checklist with the knock-outs marked turns a long argument into a ten-minute meeting.</div>
+<div class="chk"><b>What to check</b>«Do we have three certified people available?» and «Can we take on 9,000 € of exposure per critical event?» have to be knock-outs.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>Section 6 has per-event caps and an annual cap of 8 %. It is very easy to add them up or mix them up. And the three missing annexes —the bid template, the preventive plan and the closed list of wear parts— are precisely the ones that determine the cost: without them, any price is just a number.</p></div>
+<p class="learn"><b>What you learn:</b> That in a contractual document the expensive part is not what it says, but what it leaves unsaid.</p>
+</div></section>
+<section class="case" id="O10"><div class="container">
+<div class="code">Case O10 · Word · version control</div>
+<h2>What has actually changed</h2>
+<div class="stripe"><div>Mission<b>M03</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O10_COMPARE</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>Two versions of the travel and expenses policy: 1.4 from January 2025 and 2.0 in force since this month. HR has to communicate the changes and has already had twenty emails asking the same thing.</p>
+<p>The literal comparison produces a list of thirty differences. The useful one produces five: the ones that make somebody lose money or break a rule without realizing it.</p>
+<p class="files"><b>Who it is for.</b> HR, administration, internal communications, executive assistants, and anyone who manages internal policy or rules.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>travel_policy_v1.docx</b> — version 1.4, in force since January 2025.</li>
+<li><b>travel_policy_v2.docx</b> — version 2.0, in force since September 2026.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A table of changes with the old and the new wording, one row per change.</li>
+<li>A split into material and cosmetic changes, with the criterion spelled out.</li>
+<li>An internal communication of under 150 words.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">The literal comparison</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching two versions of a fictional internal policy. Compare them section by section.
+
+Give me a table with: section, wording in version 1.4, wording in version 2.0, and type of change —added, removed or modified.
+
+Go through both in full. Don't leave out small changes yet.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> First you surface everything, then you prioritize. The other way round you lose changes that look minor and aren't, such as a deadline.</div>
+<div class="chk"><b>What to check</b>At least these have to appear: approval lead time, mileage threshold, domestic accommodation cap, per diem amounts, claim deadline and booking channel.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Material or cosmetic</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now classify each change as material or cosmetic.
+
+Define the criterion you are going to use first and apply it afterwards. A change is material if it alters what a person can or cannot do, how much they can spend, by when they have to act, or what happens to them if they don't comply.
+
+Sort the material ones by number of people affected.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Asking for the criterion before the classification makes it arguable. Without an explicit criterion, the classification is an opinion in the shape of a table.</div>
+<div class="chk"><b>What to check</b>«Razonable» becoming «proporcionado»: cosmetic. The claim deadline going from 30 to 15 calendar days: material, and one of the serious ones.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The change nobody sees</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Of the material changes, identify the three that will generate the most queries and explain why.
+
+Also separate the ones that make the employee's position worse from the ones that make it better, and flag whether any of them has retroactive effect on trips already taken or expenses not yet claimed.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The change that causes conflict isn't the biggest one: it's the one that catches somebody who had already planned something under the old rule.</div>
+<div class="chk"><b>What to check</b>The 15-day deadline affects expenses from trips already taken. The accommodation cap goes up, so it improves things. The mandatory booking channel is new and didn't exist before.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The communication</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Draft the internal communication. 150 words maximum.
+
+Structure: what actually changes for you —four points maximum—, from when, what you have to do differently this week, and where to ask.
+
+Don't list the cosmetic changes. Don't use the word «update». Don't ask people to read the full document.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Banning «update» forces you to say what changes. And not asking people to read the full document is the honest move: nobody is going to.</div>
+<div class="chk"><b>What to check</b>Count the words. Check that the 15-day deadline is among the four points.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">What the documents don't answer</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To finish, tell me which reasonable questions from staff canNOT be answered by reading these two documents.
+
+For each one, say which function would have to be asked.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This is the list HR is going to get by email on Tuesday. Having it beforehand lets you answer it once instead of twenty times.</div>
+<div class="chk"><b>What to check</b>What happens to a trip approved under the previous version is not settled in either document.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The literal comparison returns a long list where every change weighs the same. The international per diem shows up as a difference and isn't one: the international amounts haven't been touched. And the claim deadline —from thirty days to fifteen, with loss of the right to reimbursement— gets lost among the amounts if you haven't defined what counts as material first.</p></div>
+<p class="learn"><b>What you learn:</b> That comparing is easy and prioritizing is the work, and that the prioritization criterion has to be written down before it is applied.</p>
+</div></section>
+<section class="case" id="O11"><div class="container">
+<div class="code">Case O11 · Copilot Chat with web</div>
+<h2>Searching the web without repeating nonsense</h2>
+<div class="stripe"><div>Mission<b>M05</b></div><div>Duration<b>25 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O11_WEB</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>An internal note with six claims picked up from scattered reading and not a single source. It is going to the committee. One is verifiable, one is out of date, one is corridor gossip and one depends on internal information that isn't in the note.</p>
+<p>This case trains the hardest part of Copilot Chat with web search on: telling apart what comes from the file, what comes from the internet and what comes from the model.</p>
+<p class="files"><b>Who it is for.</b> Strategy, purchasing, R&D, communications. And anyone who has ever forwarded a figure because it sounded about right.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>internal_trends_note.md</b> — a note with six unsourced claims.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>The six claims classified by type of verifiability.</li>
+<li>The note rewritten with dated, locatable sources where they exist.</li>
+<li>A list of what must not be repeated outside the room.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">Classify before searching</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm attaching a fictional internal note with six unsourced claims. Don't search yet.
+
+Classify each claim into one of these four categories:
+A) Verifiable with a public source.
+B) Verifiable only with internal information that isn't in the note.
+C) Not verifiable as worded, because it is vague or has no reference.
+D) Rumor or a claim about third parties that should not be repeated without confirmation.
+
+Explain in one line why each one lands where it lands.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> Searching without classifying means the search engine finds something for everything, including for what can't be checked. The classification decides what deserves a search.</div>
+<div class="chk"><b>What to check</b>Claim 4, «un estudio reciente dice un 40 %», is type C: it doesn't identify the study. Claim 5, about the competitor's plant closure, is type D.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Search only what is searchable</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now search the web for the claims you classified as A only.
+
+For each one, come back with: what the source says exactly, the link, the source's publication date and whether it confirms, qualifies or contradicts the claim in the note.
+
+If you can't find a reliable, dated source, say so and don't fill the gap with general knowledge.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Say so and don't fill the gap with general knowledge» is the central instruction of this case. Without it, the model covers the gap with what it learned in training, undated and unflagged.</div>
+<div class="chk"><b>What to check</b>Every figure that appears has to carry a link and a date. If one doesn't, it doesn't go into the note.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">Separate the three origins</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Review your previous answer and mark up for me, with three different labels, where each claim you made comes from: the file I attached, a web source you have just consulted, or your general knowledge.
+
+If there is anything in the third category, set it aside and do not fold it into the note.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> This distinction is the one that disappears the moment the answer is read straight through. Asking for it explicitly brings it back.</div>
+<div class="chk"><b>What to check</b>No general-knowledge claim may be left inside the final note.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">The note rewritten</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Rewrite the note for the committee. One page maximum. Structure:
+
+1. What we can state, with source and date beside each figure.
+2. What we need to check internally, with the function to ask.
+3. What must not be repeated outside this room, and why.
+
+Don't include any claim without one of those three labels.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The third block is what stops a rumor about a competitor ending up in a client presentation three weeks later.</div>
+<div class="chk"><b>What to check</b>The claim about the competitor's plant closure has to be in block 3.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">Our own rule</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Write me, in three lines, the rule this organization should apply before taking an external figure into an internal document. Word it as a check, not as a principle.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> «Be rigorous with sources» is not a rule: it is a wish. «No external figure goes in without a link and a publication date» is.</div>
+<div class="chk"><b>What to check</b>The rule has to be applicable in under a minute to any document.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The claim about European regulation sounds plausible and is the kind that does the most damage: accept it and the organization starts labeling content to meet an obligation nobody has checked. And the 40 % saving is a figure with no identified study which, once repeated on a slide, becomes house data.</p></div>
+<p class="learn"><b>What you learn:</b> That web search doesn't remove the responsibility to verify: it shifts it, and speeds it up.</p>
+</div></section>
+<section class="case" id="O12"><div class="container">
+<div class="code">Case O12 · Cross-cutting · block close</div>
+<h2>Your pocket template</h2>
+<div class="stripe"><div>Mission<b>M12</b></div><div>Duration<b>20 min</b></div><div>Prompts<b>5</b></div><div>Folder<b>O12_TEMPLATE</b></div></div>
+<h3 class="sub">The situation</h3>
+<p>The last case has no new file. It has the best result you got today and the obligation to turn it into something that will work next week, with a different file and a different problem.</p>
+<p>Without this step, the day produces eleven results and no method.</p>
+<p class="files"><b>Who it is for.</b> Everyone. This is the case that decides whether the training transfers to the job or stays in the classroom.</p>
+<h3 class="sub">What you attach</h3><ul class="files">
+<li><b>brief_template_DATOS.md</b> — the pack's base template.</li>
+<li>Your own best result from cases O01 to O11, with the conversation that produced it.</li>
+</ul>
+<h3 class="sub">What you should have at the end</h3><ul>
+<li>A personal template with gaps, tested on a different case.</li>
+<li>Three rules of your own written as checks.</li>
+<li>A name and a place to keep it.</li>
+</ul>
+<h3 class="sub">The prompts · one at a time</h3>
+<div class="step"><div class="step-h"><div class="step-n">1</div><div class="step-t">From conversation to template</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>I'm going to paste in the sequence of prompts that worked best for me today. Turn it into a reusable template.
+
+Replace with gaps in square brackets everything that is specific to this case —the file, the sector, the names, the figures— and keep whatever is method.
+
+Next to each gap, write in one line what kind of information goes there.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The line between the specific and the method is exactly what you have to learn to see. A prompt saved without gaps is only good for today's file.</div>
+<div class="chk"><b>What to check</b>Read it imagining a different file. If any sentence stops making sense, it was specific and you haven't marked it.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">2</div><div class="step-t">Test it cold</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Now test your own template: apply it to this other case —[describe in two lines a real problem from your job, with no confidential data]— and tell me which gaps you wouldn't know how to fill and what the template is missing to work here.
+
+Don't fix it yet: tell me what fails.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A template that has only been tested on the case that produced it hasn't been tested. The cold test is what uncovers what was taken for granted.</div>
+<div class="chk"><b>What to check</b>If every gap fills in without friction, the template is probably too generic to be useful.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">3</div><div class="step-t">The check block</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Add a fixed closing check block to my template, with five questions I am always going to ask myself before accepting an answer.
+
+Make them concrete questions about the answer, not general principles. Make them answerable in a minute.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> The check block is the part of the template that stops autopilot once you have been using it for three months.</div>
+<div class="chk"><b>What to check</b>None of the five may start with «Is it appropriate…?» or «Is it correct…?»: those are questions that answer themselves.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">4</div><div class="step-t">My three rules</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>Based on everything we have done today, propose three personal rules for working with Copilot, worded as verifiable checks and not as principles.
+
+Then tell me which of the three is going to be hardest for me to keep, and why.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A rule you can't check is a rule you don't keep. And knowing which one will be hard is what makes you keep it anyway.</div>
+<div class="chk"><b>What to check</b>Rewrite any rule that starts with «always» without saying what gets checked.</div></div>
+<div class="step"><div class="step-h"><div class="step-n">5</div><div class="step-t">Keep it where you'll find it</div></div>
+<div class="pbox"><span class="plabel">Prompt to copy</span><button class="copy">Copy</button><pre>To finish, give me the final template in a clean text block, ready to copy, with a short title and one line explaining when to use it and when not to.
+
+Propose three possible file names and tell me which folder in my work setup would make the most sense to keep it in.</pre></div>
+<div class="why"><b>Why we ask for it this way.</b> A template you have to go looking for doesn't get used. The name and the location are part of the deliverable.</div>
+<div class="chk"><b>What to check</b>Save it today, before you leave the classroom. Tomorrow you won't.</div></div>
+<button class="copyall">Copy all 5 prompts</button>
+<div class="callout"><div class="t">The trap in this case</div><p>The temptation is to save the long prompt that worked, exactly as it is. It will work once more and then stop fitting, and the conclusion will be that «this doesn't work for my job». What you save is not the prompt: it is the sequence and the checks.</p></div>
+<p class="learn"><b>What you learn:</b> That the difference between having done a course and having changed how you work fits in a half-page file.</p>
+</div></section></main>
+<footer><div class="container"><p><b>Copilot Decision Lab · SIGMA</b> — Block A, office work with Copilot Chat. Twelve cases, sixty prompts. Training material by Kemp.</p><p style="margin-top:8px">Every scenario, figure, company, person and document is synthetic. None of it represents real SIGMA information.</p></div></footer>
+<button class="top" title="Back to top">↑</button>
+<script>
+const cards=[...document.querySelectorAll('.case')];
+const chips=[...document.querySelectorAll('.chip')];
+const q=document.getElementById('q');
+const cnt=document.getElementById('cnt');
+function norm(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+function filt(){
+  const t=norm(q.value.trim());
+  let n=0;
+  cards.forEach(c=>{
+    const hit=!t||norm(c.innerText).includes(t);
+    c.classList.toggle('hide',!hit); if(hit)n++;
+  });
+  cnt.textContent=n+(n===1?' case':' cases');
+  chips.forEach(ch=>{
+    const id=ch.getAttribute('href').slice(1);
+    const el=document.getElementById(id);
+    ch.style.display=(el&&el.classList.contains('hide'))?'none':'';
+  });
+}
+q.addEventListener('input',filt);
+function flash(b,txt){const o=b.textContent;b.textContent=txt;b.classList.add('ok');
+  setTimeout(()=>{b.textContent=o;b.classList.remove('ok');},1400);}
+function cp(txt,btn,label){
+  const done=()=>flash(btn,label);
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fb());}
+  else fb();
+  function fb(){const ta=document.createElement('textarea');ta.value=txt;
+    ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);
+    ta.select();try{document.execCommand('copy');done();}catch(e){}
+    document.body.removeChild(ta);}
+}
+document.querySelectorAll('.copy').forEach(b=>{
+  b.addEventListener('click',()=>cp(b.parentElement.querySelector('pre').innerText,b,'Copied'));
+});
+document.querySelectorAll('.copyall').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const c=b.closest('.case');
+    const all=[...c.querySelectorAll('.pbox pre')].map((p,i)=>'--- PROMPT '+(i+1)+' ---\n'+p.innerText).join('\n\n');
+    cp(all,b,'Copied all '+c.querySelectorAll('.pbox pre').length+' prompts');
+  });
+});
+const btnTop=document.querySelector('.top');
+addEventListener('scroll',()=>{btnTop.classList.toggle('show',scrollY>700);
+  const y=scrollY+130;let cur=null;
+  cards.forEach(c=>{if(!c.classList.contains('hide')&&c.offsetTop<=y)cur=c.id;});
+  chips.forEach(ch=>ch.classList.toggle('on',ch.getAttribute('href')==='#'+cur));
+});
+btnTop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+filt();
+</script></body></html>
